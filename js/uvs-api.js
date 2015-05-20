@@ -406,6 +406,7 @@ var rest = {
 			{
 		        type: method,
 		        url: myUrl.apiUrl() + path,
+				async: false,
 				contentType: 'application/json',
 		        processData: false,
 		        data: JSON.stringify( data ),
