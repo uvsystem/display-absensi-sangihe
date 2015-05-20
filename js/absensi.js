@@ -8,7 +8,7 @@ $( document ).ready( function () {
 		tanggalAwal: myDate.getNow(),
 		tanggalAkhir: myDate.getNow(),
 		loaderNumber: 0,
-		timeout: 20000
+		timeout: 5000
 	};
 	
 	var listLoader = [ { id: 1 }, { id: 2 } ];
