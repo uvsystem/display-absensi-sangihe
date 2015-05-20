@@ -8,7 +8,8 @@ $( document ).ready( function () {
 		tanggalAwal: myDate.getNow(),
 		tanggalAkhir: myDate.getNow(),
 		loaderNumber: 0,
-		timeout: 5000
+		timeout: 5000,
+		timeoutVar: ''
 	};
 	
 	var listLoader = [ { id: 1 }, { id: 2 } ];
@@ -151,10 +152,13 @@ $( document ).ready( function () {
 		if ( sisa > 0 ) {
 			
 			reload = function() {
+				
 				setDataRekap( list, ++pageNumber );
+				
 			}
 
-			setTimeout( reload, data.timeout);
+			data.timeoutVar = setTimeout( reload, data.timeout);
+			
 		} else {
 			
 			reload = function() {
@@ -166,13 +170,14 @@ $( document ).ready( function () {
 				} else {
 					
 					data.loaderNumber = 0;
+					
 				}
 				
 				loadRekap();
 				
 			}
 			
-			setTimeout( reload, data.timeout);
+			data.timeoutVar = setTimeout( reload, data.timeout);
 			
 		}
 	}
@@ -186,12 +191,14 @@ $( document ).ready( function () {
 	// Handler
 	$( document ).on( 'click', '#btn-rekap', function() {
 
+		clearTimeout( data.timeoutVar );
 		loadRekap();
 		
 	} );
 
 	$( document ).on( 'click', '#btn-ranking', function() {
 
+		clearTimeout( data.timeoutVar );
 		loadRanking();
 
 	} );
