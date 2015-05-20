@@ -405,7 +405,7 @@ var rest = {
 		var promise = $.ajax(
 			{
 		        type: method,
-		        url: myUrl.apiUrl + path,
+		        url: myUrl.apiUrl() + path,
 				contentType: 'application/json',
 		        processData: false,
 		        data: JSON.stringify( data ),
@@ -969,7 +969,7 @@ var myDate = {
 	
 	nowString: function() {
 	
-		var date = this.fromDate( new Date() );
+		var date = this.getNow();
 		
 		return this.toString( date );
 		
@@ -977,10 +977,20 @@ var myDate = {
 	
 	nowFormattedString: function() {
 	
-		var date = this.fromDate( new Date() );
+		var date = this.getNow();
 		
 		return this.toFormattedString( date );
 		
+	},
+	
+	nowDatePicker: function() {
+		var date = this.getNow();
+		
+		return this.toDatePickerString( date );
+	},
+	
+	getNow: function() {
+		return this.fromDate( this.now() );
 	},
 	
 	getAwal: function() {

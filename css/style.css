@@ -28,7 +28,7 @@ a:hover {
 }
 
 body {
-	background: #3A0404 url(images/page_bg.jpg) repeat-x;
+	background: #3A0404 url(../images/page_bg.jpg) repeat-x;
 	font: 11px arial, sans-serif;
 	color: #464544;
 	padding-bottom: 10px;
@@ -39,7 +39,7 @@ body {
 	width: 678px;
 	min-height: 750px;
 	_height: 750px;
-	background: url(images/header.jpg) no-repeat;
+	background: url(../images/header.jpg) no-repeat;
   position: relative;
 }
 
@@ -67,7 +67,7 @@ h1 em {
 }
 #nav li {
   float: left;
-  background: url(images/nav_left.gif) no-repeat;
+  background: url(../images/nav_left.gif) no-repeat;
   list-style: none;
   padding-left: 10px;
   padding-right: 20px;
@@ -88,7 +88,7 @@ h1 em {
 /** topcontent **/
 
 #topcon {
-  background: url(images/topcon.jpg) no-repeat;
+  background: url(../images/topcon.jpg) no-repeat;
   width: 427px;
   position: absolute;
   top: 105px;
@@ -107,7 +107,7 @@ h1 em {
 /** Body **/
 
 #content {
-  width: 710px;
+  width: 1024px;
   position: absolute;
   color: #fff;
   top: 299px;
@@ -131,14 +131,14 @@ h1 em {
   background: #730F11;
   margin-right: 18px;
 }
-.box-t { background: top url(images/box_t.gif) repeat-x; }
-.box-r { background: right url(images/box_r.gif) repeat-y; }
-.box-b { background: bottom url(images/box_b.gif) repeat-x; }
-.box-l { background: left url(images/box_l.gif) repeat-y; }
-.box-tr { background: top right url(images/box_tr.gif) no-repeat; }
-.box-br { background: bottom right url(images/box_br.gif) no-repeat; }
-.box-bl { background: bottom left url(images/box_bl.gif) no-repeat; }
-.box-tl { background: top left url(images/box_tl.gif) no-repeat; }
+.box-t { background: top url(../images/box_t.gif) repeat-x; }
+.box-r { background: right url(../images/box_r.gif) repeat-y; }
+.box-b { background: bottom url(../images/box_b.gif) repeat-x; }
+.box-l { background: left url(../images/box_l.gif) repeat-y; }
+.box-tr { background: top right url(../images/box_tr.gif) no-repeat; }
+.box-br { background: bottom right url(../images/box_br.gif) no-repeat; }
+.box-bl { background: bottom left url(../images/box_bl.gif) no-repeat; }
+.box-tl { background: top left url(../images/box_tl.gif) no-repeat; }
 
 .box-tl {
   padding: 13px 18px;
@@ -219,4 +219,3 @@ p.more {
   display: inline;
   list-style: none;
 }
-
