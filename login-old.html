@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Bootstrap's CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Cover's CSS -->
+	<link rel="stylesheet" href="css/cover.css">
+    <!-- Cover's CSS -->
+	<link rel="stylesheet" href="css/unitedvision-site.css">
+
+    <title>UnitedVision</title>
+  </head>
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand"><a href="https:uvs.web.id">UnitedVision</a></h3>
+              <ul class="nav masthead-nav">
+                <li><a id="link-login" href="#" data-toggle="modal" data-target="#modal-login">Login</a></li>
+              </ul>
+            </div>
+          </div>
+		  <div id="content"></div>
+          <div class="mastfoot">
+            <div class="inner">
+              <p>UnitedVision. 2015</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<div class="modal fade" id="modal-login" role="dialog">
+	  <div class="modal-dialog  modal-cover">
+		<div class="modal-content modal-cover">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Tutup</span></button>
+		    <h4 class="modal-title">Login</h4>
+		  </div>
+		  <div class="modal-body modal-cover">
+		    <form name="f" id="form-login">
+		      <fieldset>
+                <label for="username" class="control-label">Username:</label>
+		        <input type="text" class="form-control" id="username" placeholder="Masukan Username" />
+		        <br />
+                <label for="password" class="control-label">Password:</label>
+		        <input type="password" class="form-control" id="password" placeholder="Masukan Password"/>
+		        <br />
+		      </fieldset>
+		    </form>
+		  </div><!-- modal-body -->
+		  <div class="modal-footer">
+		    <button class="btn btn-default" id="btn-cancel-login" data-dismiss="modal">Tutup</button>
+		    <button class="btn btn-default" id="btn-login" data-dismiss="modal" form="form-login">Login</button>
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<div class="modal fade" id="waitModal" role="dialog" value="false">
+		<div class="modal-dialog">
+			<div class="modal-content modal-cover">
+				<div class="modal-header">
+					<h1 class="modal-title">Loading</h1>
+				</div>
+				<div class="modal-body">
+					<div class="progress progress-striped active">
+						<div class="bar" style="width: 100%;"></div>
+					</div>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->'
+  </body>
+
+	<!-- Required Library --> 
+	<!-- jQuery Library -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap's JS -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Doc's JS -->
+    <script src="js/docs.min.js"></script>
+
+    <!-- UnitedVision's JS -->
+    <script src="js/uvs-api.js"></script>
+    <script src="js/uvs-object.js"></script>
+    <script src="js/login.js"></script>
+  
+</html>

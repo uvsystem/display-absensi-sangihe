@@ -1,82 +1,110 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>
-		<title>Kabupaten Sangihe</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
-		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" charset="utf-8" />
-		<link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css" charset="utf-8" />
-	    <link rel="icon" href="images/favicon.png">
-	</head>
-	<body>
-		<div id="wrapper">
-		  <h1><em>Sangihe</em> Channel</h1>
-		  
-		  <div id="topcon">
-		    <div id="topcon-inner">
-		      <h2>Pengumuman</h2>
-		      <p>aaa aaaa aaaaa aaaa aaaa aaa aaa aaaa aaaaa aaaa aaaa aaaew aaa aaaa aaaaa aaaa aaaa aaa.</p>
-		    </div>
-		  </div>
-		  <div id="content">
-		    <div id="body">
-				<div id="option">
-					<div class="row">
-						<div class="col-md-6"><h4>SKPD : <a id="nama-skpd"></a></h4></div>
-						<div class="col-md-6"><h4>Bagian : <a id="nama-bagian"></a></h4></div>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/favicon.png">
+    
+    <!-- UnitedVision's CSS -->
+	<link rel="stylesheet" href="css/unitedvision-site.css">
+
+    <!-- Bootstrap's CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/datepicker.css">
+	<link rel="stylesheet" href="css/dashboard.css">
+	<link rel="stylesheet" href="css/google-font.css">
+	
+    <title>Sistem Absensi</title>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+
+        <div class="navbar-header col-md-2">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a id="link-sangihe" class="navbar-brand" href="#">Kab. Sangihe</a>
+        </div>
+
+		<!-- Navigation -->
+        <div id="navigation-panel" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="nav-home" href="#">Home</a></li>
+			<li role="presentation" class="dropdown">
+			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+			      Menu<span class="caret"></span>
+			    </a>
+			    <ul class="dropdown-menu" role="menu" id="menu-nav"></ul>
+			</li>
+			<li role="presentation" class="dropdown">
+			    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+			      <b id="operator-nama" class="icon-text-left">Nama Operator</b>
+				  <span class="glyphicon glyphicon-user big-icon pull-right"></span>
+			    </a>
+			    <ul class="dropdown-menu" role="menu">
+					<li><a id="nav-user" href="#">Edit<span class="glyphicon glyphicon-pencil pull-right"></span></a></li>
+					<li><a id="nav-logout" href="#">Keluar<span class="glyphicon glyphicon-user pull-right"></span></a></li>
+			    </ul>
+			</li>
+          </ul>
+        </div><!-- Navigation -->
+		
+      </div> <!-- container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+
+		<!-- sidebar menu -->
+        <div id="menu-panel" class="col-sm-2 col-md-2 sidebar">
+		  <input id="search" type="text" class="form-control" placeholder="Cari..." />
+          <ul class="nav nav-sidebar" id="nav-menu"></ul>
+        </div>
+		<!-- end of sidebar -->
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		  <div id="message"></div>
+		  <div id="content">Konten Halaman</div>
+        </div>
+
+		<div class="modal fade" id="waitModal" role="dialog" value="false">
+			<div class="modal-dialog">
+				<div class="modal-content modal-cover">
+					<div class="modal-header">
+						<h1 class="modal-title">Loading</h1>
 					</div>
-					<br />
-					<div class="row">
-						<div class="col-md-3">
-							<div class="btn-group" role="group" aria-label="...">
-							  <button id="btn-rekap" type="button" class="btn btn-default">Rekap</button>
-							  <button id="btn-ranking" type="button" class="btn btn-default">Ranking</button>
-							</div>
-						</div>
-						<div class="col-md-9	">
-							<div id="option">
-								<div class="col-md-4">
-									<input type="date" id="absen-tanggal-awal" class="form-control" placeholder="Tanggal Awal" />
-								</div>
-								<div class="col-md-4">
-									<input type="date" id="absen-tanggal-akhir" class="form-control" placeholder="Tanggal Akhir" />
-								</div>
-								<div class="col-md-4">
-									<div class="input-group">
-										<select id="absen-pilih" class="form-control select-absen">
-											<option value="skpd">SKPD</option>
-											<option value="bagian">Bagian</option>
-										</select>
-									</div>
-								</div>
-							</div>
+					<div class="modal-body">
+						<div class="progress progress-striped active">
+							<div class="bar" style="width: 100%;"></div>
 						</div>
 					</div>
-				</div>
-		    </div>
-			
-			<br />
-			
-			<!-- Content Absen -->
-			<div id="body">
-				<div class="row">
-					<div id="content-absen"></div>
-				</div>
-		    </div>
-			
-			<marquee><b>running text here</b></marquee>
-		    <div id="footer">
-		            <p>&copy; Video Viewer  | powered by <a href="http://www.sangihekab.go.id">Pemerintah Kabupaten Sangihe</a>.</p>
-		    </div>
-		  </div>
-		</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->'
 
-		<!-- jQuery Library -->
-		<script src="js/jquery.min.js"></script>
+      </div> <!-- row -->
+    </div> <!-- container-fluid -->
 
-		<!-- UnitedVision's JS -->
-		<script src="js/uvs-api.js"></script>
-		<script src="js/absensi.js"></script>
+	<!-- Required Library -->	
+	<!-- jQuery Library -->
+    <script src="js/jquery.min.js"></script>
 
-	</body>
+    <!-- Bootstrap's JS -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/tooltip.js"></script>
+
+    <!-- UnitedVision's JS -->
+    <script src="js/uvs-api.js"></script>
+    <script src="js/uvs-object.js"></script>
+    <script src="js/uvs-controller.js"></script>
+
+  </body>
 </html>
