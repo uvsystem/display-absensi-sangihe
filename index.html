@@ -20,104 +20,45 @@
 		  </div>
 		  <div id="content">
 		    <div id="body">
-		      <div class="box" id="news">
-		        <div class="box-t">
-		          <div class="box-r">
-		            <div class="box-b">
-		              <div class="box-l">
-		                <div class="box-tr">
-		                  <div class="box-br">
-		                    <div class="box-bl">
-		                      <div class="box-tl">
-		                        <p>Antrian Sekda</p>
-		                      </div>
-		                    </div>
-		                  </div>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-		      <div class="box" id="hits">
-		        <div class="box-t">
-		          <div class="box-r">
-		            <div class="box-b">
-		              <div class="box-l">
-		                <div class="box-tr">
-		                  <div class="box-br">
-		                    <div class="box-bl">
-		                      <div class="box-tl">
-		                        <p>Antrian Wakil Bupati</p>
-		                        </ul>
-		                      </div>
-		                    </div>
-		                  </div>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-		      <div class="box" id="new">
-		        <div class="box-t">
-		          <div class="box-r">
-		            <div class="box-b">
-		              <div class="box-l">
-		                <div class="box-tr">
-		                  <div class="box-br">
-		                    <div class="box-bl">
-		                      <div class="box-tl">
-		                        <p>Antrian Bupati<p>
-		                      </div>
-		                    </div>
-		                  </div>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-		      <div class="clear"> </div>
+				<div id="option">
+					<div class="row">
+						<div class="col-md-6"><h4>SKPD : <a id="nama-skpd"></a></h4></div>
+						<div class="col-md-6"><h4>Bagian : <a id="nama-bagian"></a></h4></div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-3">
+							<div class="btn-group" role="group" aria-label="...">
+							  <button id="btn-rekap" type="button" class="btn btn-default">Rekap</button>
+							  <button id="btn-ranking" type="button" class="btn btn-default">Ranking</button>
+							</div>
+						</div>
+						<div class="col-md-9	">
+							<div id="option">
+								<div class="col-md-4">
+									<input type="date" id="absen-tanggal-awal" class="form-control" placeholder="Tanggal Awal" />
+								</div>
+								<div class="col-md-4">
+									<input type="date" id="absen-tanggal-akhir" class="form-control" placeholder="Tanggal Akhir" />
+								</div>
+								<div class="col-md-4">
+									<div class="input-group">
+										<select id="absen-pilih" class="form-control select-absen">
+											<option value="skpd">SKPD</option>
+											<option value="bagian">Bagian</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 		    </div>
 			
 			<br />
 			
 			<!-- Content Absen -->
 			<div id="body">
-				<div class="row">
-					<div class="col-md-3">
-						<div class="btn-group" role="group" aria-label="...">
-						  <button id="btn-rekap" type="button" class="btn btn-default">Rekap</button>
-						  <button id="btn-ranking" type="button" class="btn btn-default">Ranking</button>
-						</div>
-					</div>
-					<div class="col-md-9	">
-						<div id="option">
-							<div class="col-md-3">
-								<input type="date" id="absen-tanggal-awal" class="form-control" placeholder="Tanggal Awal" />
-							</div>
-							<div class="col-md-3">
-								<input type="date" id="absen-tanggal-akhir" class="form-control" placeholder="Tanggal Akhir" />
-							</div>
-							<div class="col-md-3">
-								<div class="input-group">
-									<select id="absen-pilih" class="form-control select-absen">
-										<option value="">- Pilih -</option>
-										<option value="skpd">SKPD</option>
-										<option value="bagian">Bagian</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="input-group">
-								  	<input type="text" id="absen-nama" class="form-control" placeholder="Nama" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<br />
 				<div class="row">
 					<div id="content-absen"></div>
 				</div>

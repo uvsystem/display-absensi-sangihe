@@ -1,27 +1,66 @@
 $( document ).ready( function () {
 	
 	var data = {
+		idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
 		tableSize: 2,
 		hariKerja: 22,
 		currentPage: 0,
 		pilih: 'skpd',
 		tanggalAwal: myDate.getNow(),
 		tanggalAkhir: myDate.getNow(),
-		loaderNumber: 0,
+		loaderNumber: 0, // Load mulai dari 0
 		timeout: 5000,
-		timeoutVar: ''
+		timeoutVar: '',
+		hariKerja: {
+			januari: 22,
+			februari: 22,
+			maret: 22,
+			april: 22,
+			mei: 22,
+			juni: 22,
+			juli: 22,
+			agustus: 22,
+			september: 22,
+			oktober: 22,
+			november: 22,
+			desember: 22,
+			
+			get: function( tanggal ) {
+				
+				var date = myDate.fromDatePicker( tanggal );
+
+				switch( date.month ) {
+					case '01': return this.januari;
+					case '02': return this.februari;
+					case '03': return this.maret;
+					case '04': return this.april;
+					case '05': return this.mei;
+					case '06': return this.juni;
+					case '07': return this.juli;
+					case '08': return this.agustus;
+					case '09': return this.september;
+					case '10': return this.oktober;
+					case '11': return this.november;
+					case '12': return this.desember;
+				}
+			}
+		}
 	};
 	
-	var listLoader = [ { id: 1 }, { id: 2 } ];
+	var listLoader = [ { id: 1 } ];
 	
 	$( '#absen-tanggal-awal' ).val( myDate.getAwalDatePicker() );
 	$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
 
-	//loadSkpd();
+	//loadSkpd(); // Untuk semua skpd
+	loadBagian( listLoader[0].id ); // Untuk semua bagian dalam suatu skpd
+	
 	loadRekap();
 
 	// Load data SKPD ke dalam list.
 	function loadSkpd() {
+		
+		data.pilih = 'pilih';
 
 		var object = {
 			path: '/skpd',
@@ -40,7 +79,9 @@ $( document ).ready( function () {
 	};
 
 	// Load data Bgaian ke dalam list.
-	function loadBagian() {
+	function loadBagian( idSkpd ) {
+		
+		data.pilih = 'bagian';
 
 		var object = {
 			path: '/bagian',
@@ -54,7 +95,11 @@ $( document ).ready( function () {
 			},
 			error: message.error
 		};
-
+		
+		// Load bagian berdasarkan skpd, jika idSkpd ditemukan
+		if ( idSkpd )
+			object.path = '/bagian/skpd/' + idSkpd;
+		
 		rest.callAjaxFree( object );
 	};
 
@@ -67,35 +112,33 @@ $( document ).ready( function () {
 	};
 	
 	function loadDataRekap( id ) {
-
-		page.load( $( '#content-absen' ), 'html/rekap.html');
+		
+		var awal = myDate.formatDatePicker( $( '#absen-tanggal-awal' ).val() );
+		var akhir = myDate.formatDatePicker( $( '#absen-tanggal-akhir' ).val() );
 
 		var object = {
-			path: '',
+			path: '/bagian/rekap/' + id + '/' + awal + '/' + akhir,
 			data: { },
 			method: 'GET',
 			success: function( result ) {
 
-				if ( result.tipe == 'LIST' )
-					setDataRekap( result.list, 0 );
+				if ( result.tipe == 'LIST' ) {
 
+					setDataRekap( result.list, 0 );
+					
+				} else {
+					
+					reloadLoadNumber();
+					
+				}
 			},
 			error: message.error
 		};
 
-		if ( data.pilih == 'skpd' ) {
+		if ( data.pilih == 'skpd' )
+			object.path ='/skpd/rekap/' + id + '/' + awal + '/' + akhir;
 
-			object.path ='/absen/skpd/' + id + '/' + myDate.toFormattedString( data.tanggalAwal ) + '/' + myDate.toFormattedString( data.tanggalAkhir );
-
-		}	 else if ( data.pilih == 'bagian' ) {
-
-			object.path ='/absen/bagian/' + id + '/' + myDate.toFormattedString( data.tanggalAwal ) + '/' + myDate.toFormattedString( data.tanggalAkhir );
-
-		}	else {
-
-			return;
-
-		}
+		page.load( $( '#content-absen' ), 'html/rekap.html');
 
 		rest.callAjaxFree( object );
 
@@ -103,6 +146,8 @@ $( document ).ready( function () {
 
 	function setDataRekap( list, pageNumber ) {
 
+		var tanggalAwal = $( '#absen-tanggal-awal' ).val();
+		
 		var html = '';
 
 		var base = ( pageNumber * data.tableSize);
@@ -115,43 +160,36 @@ $( document ).ready( function () {
 
 			var tmp = list[ i ];
 			
+			$( '#nama-skpd' ).html( tmp.bagian.skpd.nama );			
+			$( '#nama-bagian' ).html( tmp.bagian.nama );
+			
 			// Ubah Nama SKPD pada kanan atas
-			if ( data.pilih == 'skpd' ) {
+			if ( data.pilih == 'skpd' )
+				$( '#nama-bagian' ).html( 'Semua Bagian' );
+
+			var presentase = Math.round( ( ( tmp.hadir / data.hariKerja.get( tanggalAwal ) ) * 100 ) );
 			
-				$( '#absen-nama' ).val( tmp.pegawai.bagian.skpd.nama );
-				
-			} else if ( data.pilih == 'bagian' ) {
-			
-				$( '#absen-nama' ).val( tmp.pegawai.bagian.nama );
-				
-			} else {
-				
-				return;
-				
-			}
-					
 			html += '<tr>' +
-				'<td>' + tmp.pegawai.nip + '</td>' +
-				'<td>' + tmp.pegawai.nama + '</td>' +
-				'<td>' + tmp.pegawai.jabatan + '</td>' +
-				'<td>' + data.hariKerja + '</td>' +
-				'<td>' + 'hadir' + '</td>' +
-				'<td>' + 'terlambat' + '</td>' +
-				'<td>' + 'sakit' + '</td>' +
-				'<td>' + 'izin' + '</td>' +
-				'<td>' + 'cuti' + '</td>' +
-				'<td>' + 'persentase' + '</td>' +
+				'<td>' + tmp.nip + '</td>' +
+				'<td>' + tmp.nama + '</td>' +
+				'<td>' + tmp.jabatan + '</td>' +
+				'<td>' + data.hariKerja.get( tanggalAwal ) + '</td>' +
+				'<td>' + tmp.hadir + '</td>' +
+				'<td>' + tmp.terlambat + '</td>' +
+				'<td>' + tmp.sakit + '</td>' +
+				'<td>' + tmp.izin + '</td>' +
+				'<td>' + tmp.cuti + '</td>' +
+				'<td>' + presentase + ' %</td>' +
 				'</tr>';
 		}
 
 		page.change( $( '#table-rekap' ), html );
 		
 		var sisa = list.length - ( top );
-		var reload;
 
 		if ( sisa > 0 ) {
 			
-			reload = function() {
+			var reload = function() {
 				
 				setDataRekap( list, ++pageNumber );
 				
@@ -161,31 +199,40 @@ $( document ).ready( function () {
 			
 		} else {
 			
-			reload = function() {
-				
-				if ( ( data.loaderNumber + 1 ) < listLoader.length ) {
-					
-					data.loaderNumber++;
-					
-				} else {
-					
-					data.loaderNumber = 0;
-					
-				}
-				
-				loadRekap();
-				
-			}
-			
-			data.timeoutVar = setTimeout( reload, data.timeout);
+			data.timeoutVar = setTimeout( reloadLoadNumber, data.timeout);
 			
 		}
 	}
+	
+	function reloadLoadNumber() {
+				
+		if ( ( data.loaderNumber + 1 ) < listLoader.length ) {
+					
+			data.loaderNumber++;
+					
+		} else {
+					
+			data.loaderNumber = 0;
+					
+		}
+				
+		loadRekap();
+				
+	};
 	
 	function loadRanking() {
 		
 		page.load( $( '#content-absen' ), 'html/rekap.html');
 
+	};
+	
+	function getColor( presentase ) {
+		
+		if ( presentase > 80 )
+			return '';
+		if ( presentase > 60)
+			return '';
+		return '';
 	};
 
 	// Handler
@@ -204,16 +251,12 @@ $( document ).ready( function () {
 	} );
 	
 	$( document ).on( 'change', '#absen-tanggal-awal', function() {
-		
-		data.tanggalAwal = myDate.fromDatePicker( $( '#absen-tanggal-awal' ).val() );
 
 		loadRekap();
 		
 	} );
 
 	$( document ).on( 'change', '#absen-tanggal-akhir', function() {
-		
-		data.tanggalAkhir = myDate.fromDatePicker( $( '#absen-tanggal-akhir' ).val() );
 
 		loadRekap();
 		
@@ -225,16 +268,6 @@ $( document ).ready( function () {
 		
 		if ( !data.pilih)
 			return;
-
-		loadRekap();
-
-	} );
-
-	$( document ).on( 'change', '#absen-nama', function() {
-
-		var nama = $( '#absen-nama' ).val();
-		
-		message.writeLog( 'nama: ' + nama );
 
 		loadRekap();
 

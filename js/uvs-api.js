@@ -66,20 +66,25 @@ var message = {
 	 * Proses berhasil.
 	 * Lakukan aksi berdasarkan tipe message.
 	 */
-	success: function(result) {
+	success: function( result ) {
 	
 		switch ( result.tipe ) {
 		
-			case "SUCCESS": console.log( "Proses SUCCESS" );
+			case "SUCCESS": 
+					console.log( "Proses SUCCESS" );
+					
 					page.change( $( '#message' ), 
 						'<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Selamat!</strong> Proses berhasil</div>');
 					// alert( 'Berhasil' );
 				break;
-			case "ENTITY": console.log( "Entity Set" );
+			case "ENTITY": 
+					console.log( "Entity Set" );
 				break;
-			case "LIST": console.log( "List Set" );
+			case "LIST": 
+					console.log( "List Set" );
 				break;
-			case "OBJECT": console.log( "Object Set" );
+			case "OBJECT": 
+					console.log( "Object Set" );
 					page.change( $( '#message' ), 
 						'<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Selamat!</strong> Proses berhasil</div>');
 				break;
@@ -343,6 +348,7 @@ var rest = {
 							        
 				contentType: 'application/json',
 			
+				async: false,
 		        processData: false,
 		        data: JSON.stringify( data ),
 						
@@ -968,6 +974,10 @@ var myDate = {
 		
 	},
 	
+	getNow: function() {
+		return this.fromDate( this.now() );
+	},
+	
 	nowString: function() {
 	
 		var date = this.getNow();
@@ -985,13 +995,9 @@ var myDate = {
 	},
 	
 	nowDatePicker: function() {
-		var date = this.getNow();
+		var date = this.fromString( this.nowString() );
 		
 		return this.toDatePickerString( date );
-	},
-	
-	getNow: function() {
-		return this.fromDate( this.now() );
 	},
 	
 	getAwal: function() {
