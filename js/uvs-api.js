@@ -6,7 +6,7 @@
  * Manado, Indonesia.
  * deddy.kakunsi@gmail.com | deddykakunsi@outlook.com
  * 
- * Version: 1.1.0
+ * Version: 1.1.1
  */
  
 var myUrl = {
@@ -66,20 +66,25 @@ var message = {
 	 * Proses berhasil.
 	 * Lakukan aksi berdasarkan tipe message.
 	 */
-	success: function(result) {
+	success: function( result ) {
 	
 		switch ( result.tipe ) {
 		
-			case "SUCCESS": console.log( "Proses SUCCESS" );
+			case "SUCCESS": 
+					console.log( "Proses SUCCESS" );
+					
 					page.change( $( '#message' ), 
 						'<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Selamat!</strong> Proses berhasil</div>');
 					// alert( 'Berhasil' );
 				break;
-			case "ENTITY": console.log( "Entity Set" );
+			case "ENTITY": 
+					console.log( "Entity Set" );
 				break;
-			case "LIST": console.log( "List Set" );
+			case "LIST": 
+					console.log( "List Set" );
 				break;
-			case "OBJECT": console.log( "Object Set" );
+			case "OBJECT": 
+					console.log( "Object Set" );
 					page.change( $( '#message' ), 
 						'<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Selamat!</strong> Proses berhasil</div>');
 				break;
@@ -343,6 +348,7 @@ var rest = {
 							        
 				contentType: 'application/json',
 			
+				async: false,
 		        processData: false,
 		        data: JSON.stringify( data ),
 						
@@ -405,25 +411,19 @@ var rest = {
 		var promise = $.ajax(
 			{
 		        type: method,
-		        url: myUrl.apiUrl + path,
-				//async: false,
+		        url: myUrl.apiUrl() + path,
+				async: false,
 				contentType: 'application/json',
 		        processData: false,
 		        data: JSON.stringify( data ),
-
-				// Sebelum proses, tampilkan wait modal.
-		        beforeSend: function ( jqXHR, settings )
-				{
-		            waitModal.show();
-		        }
 			}
 			
 		);
 
-		// Otomatis parse object menjadi JSON. Dan eksekusi function.
 		promise.done( function( result )
 		{
-			result = JSON.parse( result );
+			// Otomatis parse object menjadi JSON. Dan eksekusi function.
+			// result = JSON.parse( result );
 				
 			if ( result.tipe == "ERROR" )
 				message.logResult( result ); // LOG
@@ -431,16 +431,30 @@ var rest = {
 			success( result );
 				
 		} );
-
-		// Panggil error ketika terjadi kesalahan.
 		promise.fail( error );
-			  
-		// Setelah proses selesai, sembunyikan wait modal.
-		promise.always(function ( jqXHR, textStatus )
-		{
-		       waitModal.hide();
-		} );
 		
+	},
+	
+	callAjaxFree: function( object ) {
+
+		var path = object.path; 
+		var data = object.data;
+		var method = object.method;
+		var success = object.success;
+		var error = object.error;
+			
+		if ( !path ) throw new Error( 'api.js: callAjax(): url is undefined' );
+
+		if ( !data ) data = { };
+				
+		if ( !method ) throw new Error( 'api.js: callAjax(): method is undefined' );				
+			
+		if ( !success ) success = message.success;
+			
+		if ( !error ) error = message.log;
+			
+		this.callFree( path, data, method, success, error );
+
 	},
 	
 	/*
@@ -960,9 +974,13 @@ var myDate = {
 		
 	},
 	
+	getNow: function() {
+		return this.fromDate( this.now() );
+	},
+	
 	nowString: function() {
 	
-		var date = this.fromDate( new Date() );
+		var date = this.getNow();
 		
 		return this.toString( date );
 		
@@ -970,10 +988,16 @@ var myDate = {
 	
 	nowFormattedString: function() {
 	
-		var date = this.fromDate( new Date() );
+		var date = this.getNow();
 		
 		return this.toFormattedString( date );
 		
+	},
+	
+	nowDatePicker: function() {
+		var date = this.fromString( this.nowString() );
+		
+		return this.toDatePickerString( date );
 	},
 	
 	getAwal: function() {
