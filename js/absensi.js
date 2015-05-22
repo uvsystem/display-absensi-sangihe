@@ -2,7 +2,7 @@ $( document ).ready( function () {
 	
 	var data = {
 		idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
-		tableSize: 2,
+		tableSize: 3, // Jumlah table untuk setiap waktu
 		hariKerja: 22,
 		currentPage: 0,
 		pilih: 'skpd',
@@ -117,7 +117,7 @@ $( document ).ready( function () {
 		var akhir = myDate.formatDatePicker( $( '#absen-tanggal-akhir' ).val() );
 
 		var object = {
-			path: '/bagian/rekap/' + id + '/' + awal + '/' + akhir,
+			path: '/pegawai/rekap/bagian/' + id + '/' + awal + '/' + akhir,
 			data: { },
 			method: 'GET',
 			success: function( result ) {
@@ -136,7 +136,7 @@ $( document ).ready( function () {
 		};
 
 		if ( data.pilih == 'skpd' )
-			object.path ='/skpd/rekap/' + id + '/' + awal + '/' + akhir;
+			object.path ='/pegawai/rekap/skpd/' + id + '/' + awal + '/' + akhir;
 
 		page.load( $( '#content-absen' ), 'html/rekap.html');
 
