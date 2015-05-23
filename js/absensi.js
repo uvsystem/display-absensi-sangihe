@@ -2,9 +2,9 @@ $( document ).ready( function () {
 
 	// Halaman awal adalah rekap
 	pageName = 'rekap';
+	data.pilih = 'bagian';
 
-	//loadSkpd(); // Untuk semua skpd
-	loadBagian( listLoader[0].id ); // Untuk semua bagian dalam suatu skpd
+	loadDefaultLoader();
 
 	page.load( $( '#content-absen' ), 'html/rekap.html');
 	page.load( $( '#option-panel' ), 'html/rekap-option.html' );
@@ -18,6 +18,8 @@ $( document ).ready( function () {
 	$( document ).on( 'click', '#btn-rekap', function() {
 
 		pageName = 'rekap';
+
+		loadDefaultLoader();
 
 		page.load( $( '#content-absen' ), 'html/rekap.html');
 		page.load( $( '#option-panel' ), 'html/rekap-option.html' );
@@ -34,6 +36,8 @@ $( document ).ready( function () {
 
 		pageName = 'ranking';
 		
+		loadSkpd();
+		
 		page.load( $( '#content-absen' ), 'html/ranking.html');
 		page.load( $( '#option-panel' ), 'html/ranking-option.html' );
 	
@@ -47,6 +51,8 @@ $( document ).ready( function () {
 	
 	$( document ).on( 'change', '#absen-tanggal-awal', function() {
 
+		clearTimeout( data.timeoutVar );
+
 		if ( pageName == 'rekap') {
 			_rekap.load();
 		} else {
@@ -56,6 +62,8 @@ $( document ).ready( function () {
 	} );
 
 	$( document ).on( 'change', '#absen-tanggal-akhir', function() {
+
+		clearTimeout( data.timeoutVar );
 
 		if ( pageName == 'rekap') {
 			_rekap.load();
@@ -67,18 +75,31 @@ $( document ).ready( function () {
 
 	$( document ).on( 'change', '#absen-pilih', function() {
 
+		clearTimeout( data.timeoutVar );
+
 		data.pilih = $( '#absen-pilih' ).val();
 		
 		if ( !data.pilih)
 			return;
 		
 		if ( data.pilih == 'skpd' ) {
-			
+
+			data.pilih = 'skpd';
 			loadSkpd();
 			
 		} else if ( data.pilih == 'bagian' ) {
+
+			data.pilih = 'bagian';
 			
-			loadBagian();
+			if ( pageName == 'rekap') {
+				
+				loadDefaultLoader();
+				
+			} else {
+				
+				loadSkpd();
+				
+			}
 			
 		}
 		
@@ -93,11 +114,41 @@ $( document ).ready( function () {
 	} );
 });
 
+function loadDefaultLoader() {
+	
+	var tmpLoader = [];
+	loadBagian( 5 ); // Untuk semua bagian dalam suatu skpd
+	tmpLoader = joinList( tmpLoader, listLoader );
+	loadBagian( 6 ); // Untuk semua bagian dalam suatu skpd
+	tmpLoader = joinList( tmpLoader, listLoader );
+	loadBagian( 7 ); // Untuk semua bagian dalam suatu skpd
+	tmpLoader = joinList( tmpLoader, listLoader );
+	
+	listLoader = tmpLoader;
+	
+};
+
+function joinList( list1, list2 ) {
+
+	if ( !list2 )
+		return list1;
+	
+	var firstIndex = list1.length;
+	var index = 0;
+	for ( index = 0; index < list2.length; index++ ) {
+		
+		list1[ firstIndex ] = list2[ index ];
+		firstIndex++;
+		
+	}
+	
+	return list1;
+	
+};
+
 
 // Load data SKPD ke dalam list.
 function loadSkpd() {
-		
-	data.pilih = 'skpd';
 
 	var object = {
 		path: '/skpd',
@@ -117,8 +168,6 @@ function loadSkpd() {
 
 // Load data Bagian (berdasarkan skpd) ke dalam list.
 function loadBagian( idSkpd ) {
-		
-	data.pilih = 'bagian';
 
 	var object = {
 		path: '/bagian',
@@ -140,7 +189,7 @@ function loadBagian( idSkpd ) {
 	rest.callAjaxFree( object );
 };
 	
-var listLoader = [ { id: 5 }, { id: 6 }, { id: 7 } ];
+var listLoader = [ ];
 var pageName = 'rekap';
 
 function reloadLoadNumber( container ) {
@@ -268,7 +317,6 @@ var _rekap = {
 		$( '#nama-skpd' ).html( tmp.bagian.skpd.nama );			
 		$( '#nama-bagian' ).html( tmp.bagian.nama );
 				
-		// Ubah Nama SKPD pada kanan atas
 		if ( data.pilih == 'skpd' )
 			$( '#nama-bagian' ).html( 'Semua Bagian' );
 
@@ -348,7 +396,7 @@ var _ranking = {
 		};
 
 		if ( data.pilih == 'skpd' )
-			object.path ='/skpd/' + id + '/' + awal + '/' + akhir;
+			object.path ='/skpd/rekap/' + awal + '/' + akhir;
 
 		rest.callAjaxFree( object );
 
@@ -391,8 +439,8 @@ var _ranking = {
 				$( '#nama-bagian' ).html( tmp.nama );
 
 				html += '<tr>' +
-					'<td>' + tmp.nama + '</td>' +
 					'<td>' + tmp.skpd.nama + '</td>' +
+					'<td>' + tmp.nama + '</td>' +
 					'<td>' + tmp.jumlahPegawai + '</td>' +
 					'<td>' + presentase + ' %</td>' +
 					'</tr>';
