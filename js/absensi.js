@@ -140,7 +140,7 @@ function loadBagian( idSkpd ) {
 	rest.callAjaxFree( object );
 };
 	
-var listLoader = [ { id: 1 } ];
+var listLoader = [ { id: 5 }, { id: 6 }, { id: 7 } ];
 var pageName = 'rekap';
 
 function reloadLoadNumber( container ) {
