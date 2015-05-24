@@ -127,6 +127,10 @@ h1 em {
   background: url(../images/foto.jpg) no-repeat;
 }
 
+#running-text {
+	color: #fff;
+}
+
 /** Body **/
 #content {
   width: 1200px;

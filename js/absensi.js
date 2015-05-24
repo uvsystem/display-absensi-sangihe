@@ -436,8 +436,10 @@ var _ranking = {
 				
 				$( '#nama-skpd' ).html( 'Semua SKPD' );
 				$( '#nama-bagian' ).html( 'Semua Bagian' );
-				
-				html += '<tr>' +
+		
+				var color = getColor( presentase );
+					
+				html += '<tr class="' + color + '">' +
 					'<td>' + tmp.nama + '</td>' +
 					'<td>Semua</td>' +
 					'<td>' + tmp.jumlahPegawai + '</td>' +
@@ -448,8 +450,10 @@ var _ranking = {
 				
 				$( '#nama-skpd' ).html( tmp.skpd.nama );
 				$( '#nama-bagian' ).html( 'Semua Bagian' );
-
-				html += '<tr>' +
+		
+				var color = getColor( presentase );
+					
+				html += '<tr class="' + color + '">' +
 					'<td>' + tmp.skpd.nama + '</td>' +
 					'<td>' + tmp.nama + '</td>' +
 					'<td>' + tmp.jumlahPegawai + '</td>' +
