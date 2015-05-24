@@ -88,12 +88,12 @@ h1 em {
 /** topcontent **/
 
 #topcon {
-  background: url(../images/topcon.jpg) no-repeat;
-  width: 427px;
+  background-color: #a00;
   position: absolute;
-  top: 105px;
-  left: 338px;
+  top: 0px;
+  left: 50px;
   color: #fff;
+  height: 200px;
 }
 #topcon-inner {
   margin: 33px 40px 41px 85px;
@@ -104,10 +104,32 @@ h1 em {
   font-size: 14px;
 }
 
-/** Body **/
+#top-content {
+	left: 50px;
+}
 
+/** Pengumuman **/
+#pengumuman {
+  height: 200px;
+  background-color: #a00;
+  color: #fff;
+  position: absolute;
+  right: 46px;
+  border: 3px solid white;
+}
+
+#foto {
+  position: relative;
+  left: 70px;
+  top: 20px;
+  min-height: 200px;
+  _height: 200px;
+  background: url(../images/foto.jpg) no-repeat;
+}
+
+/** Body **/
 #content {
-  width: 1024px;
+  width: 1200px;
   position: absolute;
   color: #fff;
   top: 299px;
@@ -225,30 +247,30 @@ p.more {
   background-color: #dff0d8 !important;
 }
 
-.table tbody tr > td.error {
+.table tbody > tr.error {
   background-color: #f2dede !important;
 }
 
-.table tbody tr > td.warning {
+.table tbody > tr.warning {
   background-color: #fcf8e3 !important;
 }
 
-.table tbody tr > td.info {
+.table tbody > tr.info {
   background-color: #d9edf7 !important;
 }
 
-.table-hover tbody tr:hover > td.success {
+.table-hover tbody:hover > tr.success {
   background-color: #d0e9c6 !important;
 }
 
-.table-hover tbody tr:hover > td.error {
+.table-hover tbody:hover > tr.error {
   background-color: #ebcccc !important;
 }
 
-.table-hover tbody tr:hover > td.warning {
+.table-hover tbody:hover > tr.warning {
   background-color: #faf2cc !important;
 }
 
-.table-hover tbody tr:hover > td.info {
+.table-hover tbody:hover > tr.info {
   background-color: #c4e3f3 !important;
 }

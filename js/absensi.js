@@ -208,10 +208,19 @@ function reloadLoadNumber( container ) {
 				
 };
 
+function getColor( presentase ) {
+	
+	if ( presentase > 80 )
+		return 'success';
+	if ( presentase > 60 )
+		return 'warning';
+	return 'error';
+};
+
 	
 var data = {
 	idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
-	tableSize: 5, // Jumlah table untuk setiap waktu
+	tableSize: 4, // Jumlah table untuk setiap waktu
 	hariKerja: 22,
 	currentPage: 0,
 	pilih: 'skpd',
@@ -321,8 +330,10 @@ var _rekap = {
 			$( '#nama-bagian' ).html( 'Semua Bagian' );
 
 			var presentase = Math.round( ( ( tmp.hadir / data.hariKerja.get( tanggalAwal ) ) * 100 ) );
+		
+			var color = getColor( presentase );
 				
-			html += '<tr>' +
+			html += '<tr class="' + color + '">' +
 				'<td>' + tmp.nip + '</td>' +
 				'<td>' + tmp.nama + '</td>' +
 				'<td>' + tmp.jabatan + '</td>' +
@@ -423,7 +434,7 @@ var _ranking = {
 			// Ubah Nama SKPD pada kanan atas
 			if ( data.pilih == 'skpd' ) {
 				
-				$( '#nama-skpd' ).html( tmp.nama );
+				$( '#nama-skpd' ).html( 'Semua SKPD' );
 				$( '#nama-bagian' ).html( 'Semua Bagian' );
 				
 				html += '<tr>' +
@@ -436,7 +447,7 @@ var _ranking = {
 			} else {
 				
 				$( '#nama-skpd' ).html( tmp.skpd.nama );
-				$( '#nama-bagian' ).html( tmp.nama );
+				$( '#nama-bagian' ).html( 'Semua Bagian' );
 
 				html += '<tr>' +
 					'<td>' + tmp.skpd.nama + '</td>' +
