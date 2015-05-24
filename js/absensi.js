@@ -28,6 +28,9 @@ $( document ).ready( function () {
 		$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
 		
 		clearTimeout( data.timeoutVar );
+		
+		data.loaderNumber = 0;
+		
 		_rekap.load();
 		
 	} );
@@ -45,6 +48,9 @@ $( document ).ready( function () {
 		$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
 		
 		clearTimeout( data.timeoutVar );
+		
+		data.loaderNumber = 0;
+		
 		_ranking.load();
 
 	} );
