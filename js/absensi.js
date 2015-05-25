@@ -233,7 +233,7 @@ var data = {
 	tanggalAwal: myDate.getNow(),
 	tanggalAkhir: myDate.getNow(),
 	loaderNumber: 0, // Load mulai dari 0
-	timeout: 5000,
+	timeout: 10000, // Rentang waktu untuk berganti data absen
 	timeoutVar: '',
 	hariKerja: {
 		januari: 22,
