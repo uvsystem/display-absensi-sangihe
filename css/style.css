@@ -126,12 +126,6 @@ h1 em {
   background: url(../images/foto.jpg) no-repeat;
 }
 
-#video {
-	position: relative;
-	height: 200px;
-	width: 100%;
-}
-
 #running-text {
 	color: #fff;
 }
