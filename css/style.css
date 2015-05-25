@@ -44,7 +44,7 @@ body {
 }
 
 h1 {
-  padding: 25px 0 0 30px;
+  padding: 15px 0 0 0px;
   font: 32px "arial black", arial, sans-serif;
   color: #151515;
 }
@@ -62,7 +62,7 @@ h1 em {
 #nav {
   position: absolute;
   top: 0px;
-  left: 335px;
+  left: 15px;
   width: 500px;
 }
 #nav li {
@@ -113,14 +113,13 @@ h1 em {
   height: 200px;
   background-color: #a00;
   color: #fff;
-  position: absolute;
-  right: 46px;
+  _position: absolute;
   border: 3px solid white;
 }
 
 #foto {
   position: relative;
-  left: 70px;
+  left: 0px;
   top: 20px;
   min-height: 200px;
   _height: 200px;
