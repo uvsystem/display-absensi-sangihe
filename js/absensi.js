@@ -11,6 +11,8 @@ $( document ).ready( function () {
 	
 	$( '#absen-tanggal-awal' ).val( myDate.getAwalDatePicker() );
 	$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
+
+	setInterval( myDate.clock.view, 1000 );
 	
 	_rekap.load();
 
