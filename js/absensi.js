@@ -645,7 +645,7 @@ var _rss = {
 
 		page.change( $( '#rss' ), '' );
 		
-		$( '#rss' ).rss( 'http://www.sangihekab.go.id/home/rss', 
+		$( '#rss' ).rss( 'https://www.sangihekab.go.id/home/rss', 
 			{
 				limit: 100,
 	            effect: 'slideFastSynced',
