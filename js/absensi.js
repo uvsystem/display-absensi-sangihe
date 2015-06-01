@@ -259,7 +259,7 @@ var data = {
 				case '03': return this.maret;
 				case '04': return this.april;
 				case '05': return this.mei;
-				case '06': return this.jun
+				case '06': return this.juni;
 				case '07': return this.juli;
 				case '08': return this.agustus;
 				case '09': return this.september;
@@ -346,6 +346,7 @@ var _rekap = {
 				'<td>' + data.hariKerja.get( tanggalAwal ) + '</td>' +
 				'<td>' + tmp.hadir + '</td>' +
 				'<td>' + tmp.terlambat + '</td>' +
+				'<td>' + tmp.pulang + '</td>' +
 				'<td>' + tmp.sakit + '</td>' +
 				'<td>' + tmp.izin + '</td>' +
 				'<td>' + tmp.cuti + '</td>' +
