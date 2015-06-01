@@ -1,5 +1,5 @@
 $( document ).ready( function () {
-
+	
 	// Halaman awal adalah rekap
 	pageName = 'rekap';
 	data.pilih = 'bagian';
@@ -12,7 +12,8 @@ $( document ).ready( function () {
 	$( '#absen-tanggal-awal' ).val( myDate.getAwalDatePicker() );
 	$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
 
-	setInterval( myDate.clock.view, 1000 );
+	_rss.viewDefault();
+	clock.digital.renderTime();
 	
 	_rekap.load();
 
@@ -497,3 +498,234 @@ var _ranking = {
 	}
 	
 };
+
+var clock = {
+	
+	itemNumber: 0,
+
+	view: function() {
+		
+		var canvas = document.getElementById("clock");
+		var ctx = canvas.getContext("2d");
+		var radius = canvas.height / 2;
+		ctx.translate(radius, radius);
+		radius = radius * 0.90
+
+		setInterval( function() {
+			clock.drawClock( ctx, radius );			
+		}, 1000 );
+	},
+	
+	drawClock: function ( ctx, radius ) {
+	  clock.drawFace( ctx, radius );
+	  clock.drawNumbers( ctx, radius );
+	  clock.drawTime( ctx, radius );
+	},
+
+	drawFace: function (ctx, radius) {
+	  var grad;
+	  ctx.beginPath();
+	  ctx.arc(0, 0, radius, 0, 2*Math.PI);
+	  ctx.fillStyle = 'white';
+	  ctx.fill();
+	  grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
+	  grad.addColorStop(0, '#333');
+	  grad.addColorStop(0.5, 'white');
+	  grad.addColorStop(1, '#333');
+	  ctx.strokeStyle = grad;
+	  ctx.lineWidth = radius*0.1;
+	  ctx.stroke();
+	  ctx.beginPath();
+	  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
+	  ctx.fillStyle = '#333';
+	  ctx.fill();
+	},
+
+	drawNumbers: function (ctx, radius) {
+	  var ang;
+	  var num;
+	  ctx.font = radius*0.15 + "px arial";
+	  ctx.textBaseline="middle";
+	  ctx.textAlign="center";
+	  for(num = 1; num < 13; num++){
+	    ang = num * Math.PI / 6;
+	    ctx.rotate(ang);
+	    ctx.translate(0, -radius*0.85);
+	    ctx.rotate(-ang);
+	    ctx.fillText(num.toString(), 0, 0);
+	    ctx.rotate(ang);
+	    ctx.translate(0, radius*0.85);
+	    ctx.rotate(-ang);
+	  }
+	},
+
+	drawTime: function (ctx, radius){
+	    var now = new Date();
+	    var hour = now.getHours();
+	    var minute = now.getMinutes();
+	    var second = now.getSeconds();
+	    //hour
+	    hour=hour%12;
+	    hour=(hour*Math.PI/6)+
+	    (minute*Math.PI/(6*60))+
+	    (second*Math.PI/(360*60));
+	    clock.drawHand(ctx, hour, radius*0.5, radius*0.07);
+	    //minute
+	    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+	    clock.drawHand(ctx, minute, radius*0.8, radius*0.07);
+	    // second
+	    second=(second*Math.PI/30);
+	    clock.drawHand(ctx, second, radius*0.9, radius*0.02);
+	},
+
+	drawHand: function (ctx, pos, length, width) {
+	    ctx.beginPath();
+	    ctx.lineWidth = width;
+	    ctx.lineCap = "round";
+	    ctx.moveTo(0,0);
+	    ctx.rotate(pos);
+	    ctx.lineTo(0, -length);
+	    ctx.stroke();
+	    ctx.rotate(-pos);
+	},
+	
+	digital: {
+		
+		renderTime: function () {
+			var currentTime = new Date();
+			var h = currentTime.getHours();
+			var m = currentTime.getMinutes();
+		    var s = currentTime.getSeconds();
+
+			setTimeout( clock.digital.renderTime, 1000);
+		    
+			if (h == 0) {
+				h = 12;
+			}
+			if (h < 10) {
+				h = "0" + h;
+			}
+			if (m < 10) {
+				m = "0" + m;
+			}
+			if (s < 10) {
+				s = "0" + s;
+			}
+
+			page.change( $( '#watch' ), h + ":" + m + ":" + s );
+			
+		}		
+	}
+	
+};
+
+var _rss = {
+	
+	itemIndex: 0,
+	
+	view: function() {
+		
+        $( '#rss' )
+          .hide()
+          .rss( 'http://www.sangihekab.go.id/home/rss', {
+            limit: 15,
+            effect: 'slideFastSynced',
+            layoutTemplate: '{entries}',
+            entryTemplate: '<h3>{title}</h3><div><p>{bodyPlain}</p>'
+          }, function() {
+            $( 'rss')
+              .show()
+              .find('> div')
+              .accordion( { heightStyle: 'content' } )
+          });
+		
+	},
+	
+	viewDefault: function() {
+
+		page.change( $( '#rss' ), '' );
+		
+		$( '#rss' ).rss( 'http://www.sangihekab.go.id/home/rss', 
+			{
+				limit: 100,
+	            effect: 'slideFastSynced',
+	            entryTemplate: '<p>{dynamic}</p>',
+				tokens: {
+					dynamic: function( entry, tokens ) {
+						
+						var totalEntries = tokens.totalEntries;
+						
+						if ( _rss.itemIndex > totalEntries )
+							_rss.itemIndex = 0;
+						
+						if ( tokens.index == _rss.itemIndex ) {
+							
+							return tokens.bodyPlain;
+						}
+						
+						return ' ';
+					}
+				}
+			} ).show();
+		
+		setTimeout( function() {
+			_rss.itemIndex++;
+			_rss.viewDefault();
+		}, 7000);
+
+	},
+	
+	viewFeedMikle: function() {
+		
+		var params = {
+			rssmikle_url: "http://www.sangihekab.go.id/home/rss",
+			rssmikle_frame_width: "300",
+			rssmikle_frame_height: "200",
+			frame_height_by_article: "1",
+			rssmikle_target: "_blank",
+			rssmikle_font: "Arial, Helvetica, sans-serif",
+			rssmikle_font_size: "12",
+			rssmikle_border: "off",
+			responsive: "off",
+			rssmikle_css_url: "",
+			text_align: "left",
+			text_align2: "left",
+			corner: "off",
+			scrollbar: "on",
+			autoscroll: "on",
+			scrolldirection: "up",
+			scrollstep: "3",
+			mcspeed: "20",
+			sort: "Off",
+			rssmikle_title: "on",
+			rssmikle_title_sentence: "",
+			rssmikle_title_link: "",
+			rssmikle_title_bgcolor: "#0066FF",
+			rssmikle_title_color: "#FFFFFF",
+			rssmikle_title_bgimage: "",
+			rssmikle_item_bgcolor: "#FFFFFF",
+			rssmikle_item_bgimage: "",
+			rssmikle_item_title_length: "55",
+			rssmikle_item_title_color: "#0066FF",
+			rssmikle_item_border_bottom: "on",
+			rssmikle_item_description: "on",
+			item_link: "off",
+			rssmikle_item_description_length: "150",
+			rssmikle_item_description_color: "#666666",
+			rssmikle_item_date: "gl1",
+			rssmikle_timezone: "Etc/GMT",
+			datetime_format: "%b %e, %Y %l:%M:%S %p",
+			item_description_style: "text+tn",
+			item_thumbnail: "full",
+			item_thumbnail_selection: "auto",
+			article_num: "15",
+			rssmikle_item_podcast: "off",
+			keyword_inc: "",
+			keyword_exc: ""
+		};
+		
+		feedwind_show_widget_iframe( params, $( '#rss' ).html() );
+		
+	}
+	
+}
