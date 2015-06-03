@@ -676,8 +676,6 @@ var _rss = {
 	},
 	
 	viewDefault: function() {
-
-		page.change( $( '#rss' ), '' );
 		
 		$( '#rss' ).rss( 'http://www.sangihekab.go.id/home/rss', 
 			{
