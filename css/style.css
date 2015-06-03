@@ -27,6 +27,10 @@ a:hover {
 	clear: both;
 }
 
+html {
+	background: transparent;
+}
+
 body {
 	background: #3A0404 url(../images/page_bg.jpg) repeat-x;
 	/** background-color: #800; **/
