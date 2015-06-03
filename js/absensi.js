@@ -238,38 +238,70 @@ var data = {
 	loaderNumber: 0, // Load mulai dari 0
 	timeout: 10000, // Rentang waktu untuk berganti data absen
 	timeoutVar: '',
+	
 	hariKerja: {
-		januari: 22,
-		februari: 22,
-		maret: 22,
-		april: 22,
-		mei: 22,
-		juni: 22,
-		juli: 22,
-		agustus: 22,
-		september: 22,
-		oktober: 22,
-		november: 22,
-		desember: 22,
+
+		januari: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		februari: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		maret: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		april: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		mei: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		juni: [ 1, 3, 4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 29, 30 ],
+		juli: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		agustus: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		september: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		oktober: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		november: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+		desember: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 			
-		get: function( tanggal ) {
-				
-			var date = myDate.fromDatePicker( tanggal );
+		get: function( date ) {
+
+			date = myDate.getNow();
+			var listHari;
 
 			switch( date.month ) {
-				case '01': return this.januari;
-				case '02': return this.februari;
-				case '03': return this.maret;
-				case '04': return this.april;
-				case '05': return this.mei;
-				case '06': return this.juni;
-				case '07': return this.juli;
-				case '08': return this.agustus;
-				case '09': return this.september;
-				case '10': return this.oktober;
-				case '11': return this.november;
-				case '12': return this.desember;
+				case 1: 
+					listHari = this.januari;
+					break;
+				case 2: 
+					listHari = this.februari;
+					break;
+				case 3: 
+					listHari = this.maret;
+					break;
+				case 4: 
+					listHari = this.april;
+					break;
+				case 5: 
+					listHari = this.mei;
+					break;
+				case 6: 
+					listHari = this.juni;
+					break;
+				case 7: 
+					listHari = this.juli;
+					break;
+				case 8: 
+					listHari = this.agustus;
+					break;
+				case 9: 
+					listHari = this.september;
+					break;
+				case 10: 
+					listHari = this.oktober;
+					break;
+				case 11: 
+					listHari = this.november;
+					break;
+				case 12: 
+					listHari = this.desember;
+					break;
 			}
+			
+			message.writeLog( date );
+			message.writeLog( listHari );
+			
+			return listHari.indexOf( date.day ) + 1;
 		}
 	}
 		
@@ -338,7 +370,9 @@ var _rekap = {
 		if ( data.pilih == 'skpd' )
 			$( '#nama-bagian' ).html( 'Semua Bagian' );
 
-			var presentase = Math.round( ( ( tmp.hadir / data.hariKerja.get( tanggalAwal ) ) * 100 ) );
+		
+			var hariKerja = data.hariKerja.get( tanggalAwal );
+			var presentase = Math.round( ( ( tmp.hadir / hariKerja ) * 100 ) );
 		
 			var color = getColor( presentase );
 				
@@ -346,7 +380,7 @@ var _rekap = {
 				'<td>' + tmp.nip + '</td>' +
 				'<td>' + tmp.nama + '</td>' +
 				'<td>' + tmp.jabatan + '</td>' +
-				'<td>' + data.hariKerja.get( tanggalAwal ) + '</td>' +
+				'<td>' + hariKerja + '</td>' +
 				'<td>' + tmp.hadir + '</td>' +
 				'<td>' + tmp.terlambat + '</td>' +
 				'<td>' + tmp.pulang + '</td>' +
