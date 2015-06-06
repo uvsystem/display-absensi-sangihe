@@ -230,7 +230,6 @@ function getColor( presentase ) {
 var data = {
 	idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
 	tableSize: 4, // Jumlah table untuk setiap waktu
-	hariKerja: 22,
 	currentPage: 0,
 	pilih: 'skpd',
 	tanggalAwal: myDate.getNow(),
@@ -245,21 +244,21 @@ var data = {
 		februari: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		maret: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		april: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		mei: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		juni: [ 1, 3, 4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 29, 30 ],
+		mei: [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29],
+		juni: [ 1, 3, 4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 29, 30],
 		juli: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		agustus: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		september: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		oktober: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		november: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
 		desember: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-			
+
 		get: function( date ) {
 
-			date = myDate.getNow();
+			var _month = parseInt( date.month );
 			var listHari;
 
-			switch( date.month ) {
+			switch( _month ) {
 				case 1: 
 					listHari = this.januari;
 					break;
@@ -274,7 +273,7 @@ var data = {
 					break;
 				case 5: 
 					listHari = this.mei;
-					break;
+					break; 
 				case 6: 
 					listHari = this.juni;
 					break;
@@ -298,13 +297,24 @@ var data = {
 					break;
 			}
 			
-			message.writeLog( date );
-			message.writeLog( listHari );
+			if ( _month != myDate.getNow().month )				
+				date = myDate.createLastDateFromDatePicker( date );
 			
-			return listHari.indexOf( date.day ) + 1;
+			var _day = parseInt( date.day );
+			
+			while ( ! ( listHari.indexOf( _day ) ) || ( listHari.indexOf( _day ) < 1 ) ) {
+				
+				_day--;
+				
+				if ( _day == 0)
+					return 0;
+				
+			}
+			
+			return listHari.indexOf( _day ) + 1;
 		}
 	}
-		
+
 };
 	
 var _rekap = {
@@ -370,8 +380,9 @@ var _rekap = {
 		if ( data.pilih == 'skpd' )
 			$( '#nama-bagian' ).html( 'Semua Bagian' );
 
+			var awal = myDate.fromDatePicker( tanggalAwal );
 		
-			var hariKerja = data.hariKerja.get( tanggalAwal );
+			var hariKerja = data.hariKerja.get( awal );
 			var presentase = Math.round( ( ( tmp.hadir / hariKerja ) * 100 ) );
 		
 			var color = getColor( presentase );

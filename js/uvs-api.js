@@ -1189,21 +1189,27 @@ var myDate = {
 			year: tahun
 		};
 	},
-	
+
 	createLastDate: function( bulan, tahun ) {
-	
-		var indexBulan = this.month.getIndex( bulan );
 		
 		var date = new Date();
-		date.setMonth( indexBulan );
+		date.setMonth( bulan );
 		date.setDate( 0 );
 		date.setFullYear( tahun );
 
 		return {
 			day: date.getDate(),
-			month: indexBulan,
+			month: bulan,
 			year: tahun
 		};
+	},
+	
+	createLastDateFromDatePicker: function ( date ) {
+		
+		var month = date.month;
+		var year = date.year;
+		
+		return this.createLastDate( month, year );
 	}
 	
 };
