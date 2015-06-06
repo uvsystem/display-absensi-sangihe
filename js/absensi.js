@@ -297,10 +297,16 @@ var data = {
 					break;
 			}
 			
-			if ( _month != myDate.getNow().month )				
+			if ( _month != myDate.getNow().month ) {
 				date = myDate.createLastDateFromDatePicker( date );
+			} else {
+				date = myDate.getNow();
+			}
 			
 			var _day = parseInt( date.day );
+			
+			message.writeLog( date );
+			message.writeLog( _day );
 			
 			while ( ! ( listHari.indexOf( _day ) ) || ( listHari.indexOf( _day ) < 1 ) ) {
 				
@@ -359,8 +365,6 @@ var _rekap = {
 	},
 		
 	setData: function ( list, pageNumber ) {
-
-		var tanggalAwal = $( '#absen-tanggal-awal' ).val();
 			
 		var html = '';
 
@@ -380,8 +384,8 @@ var _rekap = {
 		if ( data.pilih == 'skpd' )
 			$( '#nama-bagian' ).html( 'Semua Bagian' );
 
+			var tanggalAwal = $( '#absen-tanggal-awal' ).val();
 			var awal = myDate.fromDatePicker( tanggalAwal );
-		
 			var hariKerja = data.hariKerja.get( awal );
 			var presentase = Math.round( ( ( tmp.hadir / hariKerja ) * 100 ) );
 		
@@ -471,6 +475,8 @@ var _ranking = {
 	setData: function( list, pageNumber ) {
 
 		var tanggalAwal = $( '#absen-tanggal-awal' ).val();
+		var awal = myDate.fromDatePicker( tanggalAwal );
+		var hariKerja = data.hariKerja.get( awal );
 			
 		var html = '';
 
@@ -483,8 +489,7 @@ var _ranking = {
 		for ( var i = base; i < top; i++ ) {
 
 			var tmp = list[ i ];
-
-			var presentase = Math.round( ( ( tmp.hadir / ( tmp.jumlahPegawai * data.hariKerja.get( tanggalAwal ) ) ) * 100 ) );
+			var presentase = Math.round( ( ( tmp.hadir / ( tmp.jumlahPegawai * hariKerja ) ) * 100 ) );
 								
 			// Ubah Nama SKPD pada kanan atas
 			if ( data.pilih == 'skpd' ) {
