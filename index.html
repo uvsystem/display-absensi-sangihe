@@ -1,110 +1,114 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
 		<title>Kabupaten Sangihe</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" charset="utf-8" />
-		<link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css" charset="utf-8" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
 	    <link rel="icon" href="images/favicon.png">
 	</head>
 	<body>
-		<div class="row placeholder" id="header">
-			<div class="col-md-1">&nbsp</div>
-			<div class="col-md-4">
-				<img id="image-hrm" src="images/logo.jpg" alt="HRM">
-				<!--
-				<h1><em>Sangihe</em> Channel</h1>
-				-->
-			</div>
-			<div class="col-md-6">
-				<div id="nav">
-					<ul>
-						<li><a href="http://www.sangihekab.go.id"><span>B000</span> </a></li>
-				     	<li><a href="http://www.sangihekab.go.id/"><span>WB000</span> </a></li>
-				      	<li><a href="http://www.sangihekab.go.id/"><span>SD000</span> </a></li>
-				      	<li><a href="#"><span id="watch">00:00:00</span> </a></li>
-		    		</ul>
-				</div><!-- nav -->
-			</div>
-			<div class="col-md-1">&nbsp</div>
-		</div>
-		<div class="row" id="top-content">
-			<div class="col-md-1">&nbsp</div>
-			<div class="col-md-4">
-				<!-- foto -->
-				<!--
-				<div id="foto"></div>
-				-->
-
-				<!-- video -->
-				<div>
-					<iframe width="360" height="200" src="https://www.youtube.com/embed/oBOqefM-9uc?autoplay=1" frameborder="0" allowfullscreen></iframe>
+		<div class="placeholder">
+			<div class="col-md-1">&nbsp;</div>
+			<div class="col-md-10">
+				<div class="row placeholder" id="header">
+					<div class="col-md-6 col-sm-1">
+						<!--
+						<img id="image-hrm" src="images/logo.jpg" alt="HRM">
+						-->
+						<h1><em>Sangihe</em> Channel</h1>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<a class="nav" id="btn-absensi" href="#"><span>e-Absensi</span></a>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<a class="nav" id="btn-monev" href="#"><span>e-Monev</span></a>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<a class="nav" href="#"><span id="watch">00:00:00</span> </a>
+					</div>
 				</div>
 				
-				<!-- Canvas -->
 				<!--
-				<canvas id="clock"></canvas>
+				<div class="row placeholder"><!-- Running text --
+					<div class="col-md-12">
+						<marquee>
+							<b id="running-text">
+								<img src="images/favicon.png" />&nbsp; Selamat datang di Channel Kinerja Pegawai Kabupaten Kepulauan Sangihe &nbsp;
+								<img src="images/favicon.png" />&nbsp; Jadilah PNS yang berdisiplin dan berdedikasi untuk menunjang tercapainya visi & misi Pemerintah &nbsp;
+								<img src="images/favicon.png" />&nbsp; Kedisiplinan anda menunjang keberhasilan bersama &nbsp;
+								<img src="images/favicon.png" />&nbsp; Somahe Kai Kehage &nbsp;
+								<img src="images/favicon.png" />&nbsp; Layanan ini dipersembahkan oleh Bagian Pengelolaan Data Elektronik Kabupaten Kepulauan Sangihe &nbsp;
+								<img src="images/favicon.png" />
+							</b>
+						</marquee>
+					</div>
+				</div>
 				-->
-			</div><!-- col-md-4 -->
-			<div class="col-md-6">
-				<div class="panel panel-default" id="pengumuman">
-					<div class="panel-heading">
-						<b>PENGUMUMAN</b>
+
+				<div class="row placeholder"><!-- content -->
+					<div class="col-md-6" id="data"><!-- primary content -->
+						<div class="panel panel-primary">
+							<div class="panel-heading" id="data-heading">Nama Unit Kerja</div>
+							<div class="panel-body" id="data-body">Data</div>
+							<div class="panel-footer" id="data-footer">
+								<div class="row">
+									<div class="col-md-6">
+										<input id="opt-bulan" class="form-control" type="text" list="list-bulan" placeholder="Masukan Bulan" />
+										<datalist id="list-bulan">
+											<option>JANUARI</option>
+											<option>FEBRUARI</option>
+											<option>MARET</option>
+											<option>APRIL</option>
+											<option>MEI</option>
+											<option>JUNI</option>
+											<option>JULI</option>
+											<option>AGUSTUS</option>
+											<option>SEPTEMBER</option>
+											<option>OKTOBER</option>
+											<option>NOVEMBER</option>
+											<option>DESEMBER</option>
+										</datalist>
+									</div>
+									<div class="col-md-6">
+										<input id="opt-tahun" class="form-control" type="text" placeholder="Masukan Tahun" />
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="panel-body" id="rss">
-						<!--
-						<p>Selamat kepada Pemerintah Kabupaten Kepulauan Sangihe, atas prestasi penilaian laporan keuangan dengan Opini Wajar Tanpa Pengecualian (WTP)</p>
-						<p>Disampaikan kepada semua PNS Kabupaten Kep. Sangihe, bahwa sehubungan dengan kunjungan Presiden RI pada hari Kamis, 28 Mei 2015, diharapkan semua PNS agar dapat menghadiri dan mengikuti penyambutan tersebut.</p>
-				    	<p>Apel Kerja Bersama pada hari Senin, 1 Juni 2015 akan dilaksanakan di Halaman Kantor Bupati pada pukul 7.30. Diharapkan semua PNS Kabupaten Kepulauan Sangihe untuk dapat hadir tepat waktu.</p>
-						-->
+					<div class="col-md-6"><!-- secondary content -->
+						<div class="row"><!-- Info -->
+							<div class="panel panel-info" id="pengumuman">
+								<div class="panel-heading">
+									<b>PENGUMUMAN</b>
+								</div>
+								<div class="panel-body" id="rss"></div>
+							</div>
+						</div><!-- Info -->
+						<div class="row" id="channel"><!-- Channel -->
+							<iframe width="100%" height="100%" src="https://www.youtube.com/embed/oBOqefM-9uc?autoplay=1" frameborder="0" allowfullscreen></iframe>
+						</div>
+					</div><!-- Secondary content -->
+				</div><!-- Content -->
+
+				<div class="row placeholder"><!-- footer -->
+					<div class="col-md-12">
+						<div id="footer">
+							<p>
+								&copy; <a href="#">e-HRM</a> | 
+								<a href="https://uvs.web.id/sangihe-absensi/">eAbsensi</a> | 
+								<a href="https://uvs.web.id/sangihe-monev/">eMonev</a> | 
+								powered by <a href="http://www.sangihekab.go.id">Pemerintah Kabupaten Kepulauan Sangihe</a>
+							</p>
+						</div>
 					</div>
-				</div><!-- topcon -->
-			</div><!-- col-md-6 -->
-			<div class="col-md-1">&nbsp</div>
-		</div><!-- row -->
-		<div class="row">
-			<div class="col-md-12">
-				<marquee>
-					<b id="running-text">
-						<img src="images/favicon.png" />&nbsp Selamat datang di Channel Kinerja Pegawai Kabupaten Kepulauan Sangihe &nbsp
-						<img src="images/favicon.png" />&nbsp Jadilah PNS yang berdisiplin dan berdedikasi untuk menunjang tercapainya visi & misi Pemerintah &nbsp
-						<img src="images/favicon.png" />&nbsp Kedisiplinan anda menunjang keberhasilan bersama &nbsp
-						<img src="images/favicon.png" />&nbsp Somahe Kai Kehage &nbsp
-						<img src="images/favicon.png" />&nbsp Layanan ini dipersembahkan oleh Bagian Pengelolaan Data Elektronik Kabupaten Kepulauan Sangihe &nbsp
-						<img src="images/favicon.png" />
-					</b>
-				</marquee>
+				</div><!-- footer -->
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-1">&nbsp</div>
-			<div class="col-md-10">
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						<b id="nama-skpd"></b> - Bagian <b id="nama-bagian"></b>
-					</div>
-					<div class="panel-body" id="option-panel"></div>
-				</div>
-			</div>
-			<div class="col-md-1">&nbsp</div>
-		</div>
-		<div class="row">
-			<div class="col-md-1">&nbsp</div>
-			<div class="col-md-10">
-				<div class="panel panel-default">
-					<div id="content-absen"></div>
-				</div>
-			</div>
-			<div class="col-md-1">&nbsp</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-			    <div id="footer">
-			            <p>&copy; <a href="https://uvs.web.id/sangihe-absensi/">e-HRM</a> | powered by <a href="http://www.sangihekab.go.id">Pemerintah Kabupaten Kepulauan Sangihe</a></p>
-			    </div><!-- footer -->
-			</div>
-		</div>
+			<div class="col-md-1">&nbsp;</div>
+		</div><!-- page -->
 
 		<!-- jQuery Library -->
 		<script src="js/jquery.min.js"></script>
@@ -118,7 +122,7 @@
 		<script src="js/absensi.js"></script>
 
 		<!-- RSS JS -->
-		<script src="	js/jquery.rss.js"></script>
-		<script src="	js/rssmikle.js"></script>
+		<script src="js/jquery.rss.js"></script>
+		<script src="js/rssmikle.js"></script>
 	</body>
 </html>

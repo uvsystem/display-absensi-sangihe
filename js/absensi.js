@@ -1,141 +1,59 @@
 $( document ).ready( function () {
 	
-	// Halaman awal adalah rekap
-	pageName = 'rekap';
-	data.pilih = 'bagian';
-
-	loadDefaultLoader();
-
-	page.load( $( '#content-absen' ), 'html/rekap.html');
-	page.load( $( '#option-panel' ), 'html/rekap-option.html' );
+	$( '#opt-bulan' ).val( myDate.getBulanNama() );
+	$( '#opt-tahun' ).val( myDate.getTahun() );
 	
-	$( '#absen-tanggal-awal' ).val( myDate.getAwalDatePicker() );
-	$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
+	// Halaman awal adalah absensi
+	pageName = 'absensi';
+
+	_absensi.loadDefaultLoader();
 
 	_rss.viewDefault();
 	clock.digital.renderTime();
-	
-	_rekap.load();
+	_absensi.load();
 
 	// Handler
-	$( document ).on( 'click', '#btn-rekap', function() {
+	$( document ).on( 'click', '#btn-absensi', function() {
 
-		pageName = 'rekap';
-
-		loadDefaultLoader();
-
-		page.load( $( '#content-absen' ), 'html/rekap.html');
-		page.load( $( '#option-panel' ), 'html/rekap-option.html' );
+		myUrl = absensiUrl;
 	
-		$( '#absen-tanggal-awal' ).val( myDate.getAwalDatePicker() );
-		$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
-		
-		clearTimeout( data.timeoutVar );
-		
-		data.loaderNumber = 0;
-		
-		_rekap.load();
-		
+		_absensi.reload();
+				
 	} );
 
-	$( document ).on( 'click', '#btn-ranking', function() {
+	$( document ).on( 'click', '#btn-monev', function() {
 
-		pageName = 'ranking';
-		
-		loadSkpd();
-		
-		page.load( $( '#content-absen' ), 'html/ranking.html');
-		page.load( $( '#option-panel' ), 'html/ranking-option.html' );
+		myUrl = monevUrl;
 	
-		$( '#absen-tanggal-awal' ).val( myDate.getAwalDatePicker() );
-		$( '#absen-tanggal-akhir' ).val( myDate.getAkhirDatePicker() );
-		
-		clearTimeout( data.timeoutVar );
-		
-		data.loaderNumber = 0;
-		
-		_ranking.load();
+		_monev.reload();
 
 	} );
 	
-	$( document ).on( 'change', '#absen-tanggal-awal', function() {
+	$( document ).on( 'change', '#opt-bulan', function() {
 
 		clearTimeout( data.timeoutVar );
 
-		if ( pageName == 'rekap') {
-			_rekap.load();
+		if ( pageName == 'absensi') {
+			_absensi.load();
 		} else {
-			_ranking.load();
+			_monev.load();
 		}
 		
 	} );
 
-	$( document ).on( 'change', '#absen-tanggal-akhir', function() {
+	$( document ).on( 'change', '#opt-tahun', function() {
 
 		clearTimeout( data.timeoutVar );
 
-		if ( pageName == 'rekap') {
-			_rekap.load();
+		if ( pageName == 'absensi') {
+			_absensi.load();
 		} else {
-			_ranking.load();
+			_monev.load();
 		}
 		
 	} );
-
-	$( document ).on( 'change', '#absen-pilih', function() {
-
-		clearTimeout( data.timeoutVar );
-
-		data.pilih = $( '#absen-pilih' ).val();
-		
-		if ( !data.pilih)
-			return;
-		
-		if ( data.pilih == 'skpd' ) {
-
-			data.pilih = 'skpd';
-			loadSkpd();
-			
-		} else if ( data.pilih == 'bagian' ) {
-
-			data.pilih = 'bagian';
-			
-			if ( pageName == 'rekap') {
-				
-				loadDefaultLoader();
-				
-			} else {
-				
-				loadSkpd();
-				
-			}
-			
-		}
-		
-		data.loaderNumber = 0;
-
-		if ( pageName == 'rekap') {
-			_rekap.load();
-		} else {
-			_ranking.load();
-		}
-		
-	} );
+	
 });
-
-function loadDefaultLoader() {
-	
-	var tmpLoader = [];
-	loadBagian( 5 ); // Untuk semua bagian dalam suatu skpd
-	tmpLoader = joinList( tmpLoader, listLoader );
-	loadBagian( 6 ); // Untuk semua bagian dalam suatu skpd
-	tmpLoader = joinList( tmpLoader, listLoader );
-	loadBagian( 7 ); // Untuk semua bagian dalam suatu skpd
-	tmpLoader = joinList( tmpLoader, listLoader );
-	
-	listLoader = tmpLoader;
-	
-};
 
 function joinList( list1, list2 ) {
 
@@ -154,7 +72,6 @@ function joinList( list1, list2 ) {
 	return list1;
 	
 };
-
 
 // Load data SKPD ke dalam list.
 function loadSkpd() {
@@ -199,7 +116,7 @@ function loadBagian( idSkpd ) {
 };
 	
 var listLoader = [ ];
-var pageName = 'rekap';
+var pageName = 'absensi';
 
 function reloadLoadNumber( container ) {
 				
@@ -223,9 +140,9 @@ function getColor( presentase ) {
 		return 'success';
 	if ( presentase > 60 )
 		return 'warning';
-	return 'error';
+	return 'danger';
+	
 };
-
 	
 var data = {
 	idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
@@ -297,16 +214,10 @@ var data = {
 					break;
 			}
 			
-			if ( _month != myDate.getNow().month ) {
-				date = myDate.createLastDateFromDatePicker( date );
-			} else {
+			if ( _month == myDate.getNow().month )
 				date = myDate.getNow();
-			}
 			
 			var _day = parseInt( date.day );
-			
-			message.writeLog( date );
-			message.writeLog( _day );
 			
 			while ( ! ( listHari.indexOf( _day ) ) || ( listHari.indexOf( _day ) < 1 ) ) {
 				
@@ -323,20 +234,59 @@ var data = {
 
 };
 	
-var _rekap = {
+var _absensi = {
 
-	load: function loadRekap() {
+	loadDefaultLoader: function () {
+		
+		var tmpLoader = [];
+		loadBagian( 5 ); // Untuk semua bagian dalam suatu skpd
+		tmpLoader = joinList( tmpLoader, listLoader );
+		loadBagian( 6 ); // Untuk semua bagian dalam suatu skpd
+		tmpLoader = joinList( tmpLoader, listLoader );
+		loadBagian( 7 ); // Untuk semua bagian dalam suatu skpd
+		tmpLoader = joinList( tmpLoader, listLoader );
+		
+		listLoader = tmpLoader;
+		
+	},
+
+	reload: function() {
+		
+		message.writeLog( 'absensi.js:300: Reload absensi' );
+		
+		pageName = 'absensi';
+
+		_absensi.loadDefaultLoader();
+		
+		$( '#opt-bulan' ).val( myDate.getBulanNama() );
+		$( '#opt-tahun' ).val( myDate.getTahun() );
+		
+		clearTimeout( data.timeoutVar );
+		
+		data.loaderNumber = 0;
+		
+		_absensi.load();
+		
+	},
+
+	load: function () {
 			
 		var tmp = listLoader[ data.loaderNumber ];
 			
-		_rekap.loadData( tmp.id);
+		_absensi.loadData( tmp.id );
 			
 	},
 
-	loadData:	function ( id ) {
+	loadData: function ( id ) {
 
-		var awal = myDate.formatDatePicker( $( '#absen-tanggal-awal' ).val() );
-		var akhir = myDate.formatDatePicker( $( '#absen-tanggal-akhir' ).val() );
+		var bulan = $( '#opt-bulan' ).val();
+		var tahun = $( '#opt-tahun' ).val();
+
+		var tanggalAwal = myDate.createFirstDate( bulan, tahun );
+		var awal = myDate.toFormattedString( tanggalAwal );
+
+		var tanggalAkhir = myDate.createLastDate( bulan, tahun );
+		var akhir = myDate.toFormattedString( tanggalAkhir );
 
 		var object = {
 			path: '/pegawai/rekap/bagian/' + id + '/' + awal + '/' + akhir,
@@ -346,204 +296,219 @@ var _rekap = {
 
 				if ( result.tipe == 'LIST' ) {
 
-					_rekap.setData( result.list, 0 );
+					_absensi.setData( result.list, 0 );
 						
-				} else {
+				} else if ( result.tipe != 'ERROR' ) {
 						
-					reloadLoadNumber( _rekap );
-						
+					reloadLoadNumber( _absensi );
+					
 				}
 			},
 			error: message.error
 		};
-
-		if ( data.pilih == 'skpd' )
-			object.path ='/pegawai/rekap/skpd/' + id + '/' + awal + '/' + akhir;
 
 		rest.callAjaxFree( object );
 
 	},
 		
 	setData: function ( list, pageNumber ) {
-			
+		
 		var html = '';
 
-		var base = ( pageNumber * data.tableSize);
+		// Menentukan batas bawah dari data yang akan ditampilkan, sesuai nomor halaman dan jumlah data ddalam sekali tampil.
+		// base adalah index pada list yang akan digunakan sebagai batas bawah.
+		var base = ( pageNumber * data.tableSize );
+		
+		// Menentukan batas atas dari data yang akan ditampilkan, sesuai index batas bawah dan jumlah data dalam sekali tampil.
+		// top adalah index pada list yang akan digunakan sebagai batas atas.
 		var top = base + data.tableSize;
 
+		// Gunakan index akhir list, jika batas atas lebih besar.
 		if ( top > list.length )
 			top = list.length;
 			
 		for ( var i = base; i < top; i++ ) {
 
 			var tmp = list[ i ];
-				
-		$( '#nama-skpd' ).html( tmp.bagian.skpd.nama );			
-		$( '#nama-bagian' ).html( tmp.bagian.nama );
-				
-		if ( data.pilih == 'skpd' )
-			$( '#nama-bagian' ).html( 'Semua Bagian' );
 
-			var tanggalAwal = $( '#absen-tanggal-awal' ).val();
-			var awal = myDate.fromDatePicker( tanggalAwal );
-			var hariKerja = data.hariKerja.get( awal );
+			// Ubah judul pada panel data.
+			$( '#data-heading' ).html( tmp.bagian.nama );
+
+			// Menentukan jumlah hari kerja dalam bulan berjalan (hariKerja),
+			// presentase kehadiran terhadap jumlah hari kerja (presentase),
+			// warna data sesuai presentase kehadiran (color).
+			var tahun = $( '#opt-tahun' ).val();
+			var bulan = $( '#opt-bulan' ).val();
+			var tanggal = myDate.createLastDate( bulan, tahun );
+			
+			var hariKerja = data.hariKerja.get( tanggal );
 			var presentase = Math.round( ( ( tmp.hadir / hariKerja ) * 100 ) );
-		
 			var color = getColor( presentase );
-				
-			html += '<tr class="' + color + '">' +
-				'<td>' + tmp.nip + '</td>' +
-				'<td>' + tmp.nama + '</td>' +
-				'<td>' + tmp.jabatan + '</td>' +
-				'<td>' + hariKerja + '</td>' +
-				'<td>' + tmp.hadir + '</td>' +
-				'<td>' + tmp.terlambat + '</td>' +
-				'<td>' + tmp.pulang + '</td>' +
-				'<td>' + tmp.sakit + '</td>' +
-				'<td>' + tmp.izin + '</td>' +
-				'<td>' + tmp.cuti + '</td>' +
-				'<td>' + presentase + ' %</td>' +
-				'</tr>';
+
+			// Implementasi seperti list-view.
+			html += '<div class="placeholder">' +
+				'<div class="panel panel-' + color + '">' +
+					'<div class="panel-heading">' + tmp.nip + ' - ' + tmp.nama + '</div>' +
+					'<div class="panel-body">' +
+						'<div class="col-md-3">' +
+						'<img src="images/default.jpg" height="100%" width="100%">' +
+						'</div>' +
+						'<div class="col-md-3">' +
+							'<div class="row placeholder">' +
+								'<div class="col-md-12"><a id="persentase">' + presentase + ' %</a></div>' +
+							'</div>' +
+							'<hr />' +
+							'<div class="row placeholder">' +
+								'<div class="col-md-12">' + hariKerja + ' Hari</div>' +
+							'</div>' +
+						'</div>' +
+						'<div class="col-md-6">' +
+							'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
+							'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
+							'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
+							'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+
 		}
 
-		page.change( $( '#table-rekap' ), html );
-			
+		page.change( $( '#data-body' ), html );
+
+		// Menentukan sisa data yang masih akan ditampilkan.
 		var sisa = list.length - ( top );
 
 		if ( sisa > 0 ) {
-				
-			var reload = function() {
-					
-				_rekap.setData( list, ++pageNumber );
-					
-			}
 
-			data.timeoutVar = setTimeout( reload, data.timeout);
+			// Reload data dari list yang sama.
+			data.timeoutVar = setTimeout( function() {
+					
+				_absensi.setData( list, ++pageNumber );
+					
+			}, data.timeout );
 				
 		} else {
-				
+
+			// Reload list baru dari server.
 			data.timeoutVar = setTimeout( function() { 
-				reloadLoadNumber( _rekap );
-			}, data.timeout);
+			
+				reloadLoadNumber( _absensi );
+				
+			}, data.timeout );
 				
 		}
 	}
 		
 };
 
-var _ranking = {
-
-	load: function() {
-			
-		var tmp = listLoader[ data.loaderNumber ];
-			
-		_ranking.loadData( tmp.id);			
-
+var _monev = {
+	
+	loadDefaultLoader: function () {
+		
+		throw new Error( 'Not Supported' );
+		
 	},
 	
-	loadData: function( id ) {
+	reload: function() {
+		
+		message.writeLog( 'absensi.js:452: Reload monev' );
 
-		var awal = myDate.formatDatePicker( $( '#absen-tanggal-awal' ).val() );
-		var akhir = myDate.formatDatePicker( $( '#absen-tanggal-akhir' ).val() );
+		pageName = 'monev';
+		
+		$( '#opt-bulan' ).val( myDate.getBulanNama() );
+		$( '#opt-tahun' ).val( myDate.getTahun() );
+		
+		clearTimeout( data.timeoutVar );
+		
+		data.loaderNumber = 0;
+		
+		_monev.load();
+		
+		
+	},
+	
+	load: function() {
+			
+		_monev.loadData();
+			
+	},
+	
+	loadData: function ( id ) {
 
 		var object = {
-			path: '/bagian/rekap/' + id + '/' + awal + '/' + akhir,
+			path: '/skpd/rekap/',
 			data: { },
 			method: 'GET',
 			success: function( result ) {
 
 				if ( result.tipe == 'LIST' ) {
 
-					_ranking.setData( result.list, 0 );
-						
-				} else {
-						
-					reloadLoadNumber( _ranking );
-						
+					_monev.setData( result.list, 0 );
+					
 				}
 			},
 			error: message.error
 		};
 
-		if ( data.pilih == 'skpd' )
-			object.path ='/skpd/rekap/' + awal + '/' + akhir;
-
 		rest.callAjaxFree( object );
 
 	},
 	
-	setData: function( list, pageNumber ) {
-
-		var tanggalAwal = $( '#absen-tanggal-awal' ).val();
-		var awal = myDate.fromDatePicker( tanggalAwal );
-		var hariKerja = data.hariKerja.get( awal );
-			
+	setData: function ( list, pageNumber ) {
+		
 		var html = '';
 
-		var base = ( pageNumber * data.tableSize);
+		// Menentukan batas bawah dari data yang akan ditampilkan, sesuai nomor halaman dan jumlah data ddalam sekali tampil.
+		// base adalah index pada list yang akan digunakan sebagai batas bawah.
+		var base = ( pageNumber * data.tableSize );
+		
+		// Menentukan batas atas dari data yang akan ditampilkan, sesuai index batas bawah dan jumlah data dalam sekali tampil.
+		// top adalah index pada list yang akan digunakan sebagai batas atas.
 		var top = base + data.tableSize;
 
+		// Gunakan index akhir list, jika batas atas lebih besar.
 		if ( top > list.length )
 			top = list.length;
 			
 		for ( var i = base; i < top; i++ ) {
 
 			var tmp = list[ i ];
-			var presentase = Math.round( ( ( tmp.hadir / ( tmp.jumlahPegawai * hariKerja ) ) * 100 ) );
-								
-			// Ubah Nama SKPD pada kanan atas
-			if ( data.pilih == 'skpd' ) {
-				
-				$( '#nama-skpd' ).html( 'Semua SKPD' );
-				$( '#nama-bagian' ).html( 'Semua Bagian' );
-		
-				var color = getColor( presentase );
-					
-				html += '<tr class="' + color + '">' +
-					'<td>' + tmp.nama + '</td>' +
-					'<td>Semua</td>' +
-					'<td>' + tmp.jumlahPegawai + '</td>' +
-					'<td>' + presentase + ' %</td>' +
-					'</tr>';
-				
-			} else {
-				
-				$( '#nama-skpd' ).html( tmp.skpd.nama );
-				$( '#nama-bagian' ).html( 'Semua Bagian' );
-		
-				var color = getColor( presentase );
-					
-				html += '<tr class="' + color + '">' +
-					'<td>' + tmp.skpd.nama + '</td>' +
-					'<td>' + tmp.nama + '</td>' +
-					'<td>' + tmp.jumlahPegawai + '</td>' +
-					'<td>' + presentase + ' %</td>' +
-					'</tr>';
-				
-			}
-			
+
+			// Ubah judul pada panel data.
+			$( '#data-heading' ).html( "Monitoring & Evaluasi PPA" );
+
+			// Implementasi seperti list-view.
+			html += '<div class="placeholder">' +
+				'<div class="panel panel-default">' +
+					'<div class="panel-heading">' + tmp.nama + '</div>' +
+					'<div class="panel-body">' +
+						'<div class="col-md-12">' +
+							'<p>Jumlah Kegiatan : ' + ( tmp.jumlahKegiatan ? tmp.jumlahKegiatan : '-' ) + ' kegiatan</p>' +
+							'<p>Total Anggaran : Rp ' + ( tmp.totalAnggaran ? tmp.totalAnggaran : '-' ) + '</p>' +
+							'<p>Realisasi Anggaran : Rp ' + ( tmp.totalRealisasiAnggaran ? tmp.totalRealisasiAnggaran : '-' )+ '</p>' +
+							'<p>Realisasi Fisik : ' + ( tmp.totalRealisasiFisik ? tmp.totalRealisasiFisik : '-' ) + ' %</p>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+
 		}
 
-		page.change( $( '#table-rekap' ), html );
-			
+		page.change( $( '#data-body' ), html );
+
+		// Menentukan sisa data yang masih akan ditampilkan.
 		var sisa = list.length - ( top );
 
 		if ( sisa > 0 ) {
-				
-			var reload = function() {
-					
-				_ranking.setData( list, ++pageNumber );
-					
-			}
 
-			data.timeoutVar = setTimeout( reload, data.timeout);
-				
-		} else {
-				
-			data.timeoutVar = setTimeout( function() { 
-				reloadLoadNumber( _ranking );
-			}, data.timeout);
-				
+			// Reload data dari list yang sama.
+			data.timeoutVar = setTimeout( function() {
+
+				_monev.setData( list, ++pageNumber );
+
+			}, data.timeout );
+
 		}
 	}
 	
