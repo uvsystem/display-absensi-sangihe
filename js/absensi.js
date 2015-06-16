@@ -326,7 +326,9 @@ var _absensi = {
 		// Gunakan index akhir list, jika batas atas lebih besar.
 		if ( top > list.length )
 			top = list.length;
-			
+
+		html += '<div class="list-group">';
+		
 		for ( var i = base; i < top; i++ ) {
 
 			var tmp = list[ i ];
@@ -346,33 +348,32 @@ var _absensi = {
 			var color = getColor( presentase );
 
 			// Implementasi seperti list-view.
-			html += '<div class="placeholder">' +
-				'<div class="panel panel-' + color + '">' +
-					'<div class="panel-heading">' + tmp.nip + ' - ' + tmp.nama + '</div>' +
-					'<div class="panel-body">' +
-						'<div class="col-md-3">' +
-						'<img src="images/default.jpg" height="100%" width="100%">' +
+			html += '<div class="list-group-item list-group-item-' + color + '">' +
+				'<b class="list-group-item-heading">' + tmp.nip + ' - ' + tmp.nama + '</b>' +
+				'<br /><br />' +
+				'<div class="row">' +
+					'<div class="col-md-2" col-xs-12>' +
+					'<img src="images/default.jpg" height="100%" width="100%">' +
+					'</div>' +
+					'<div class="col-md-2 col-xs-4">' +
+						'<div class="row">' +
+							'<div class="col-md-12"><p id="persentase" class="text-center">' + presentase + ' %</p></div>' +
 						'</div>' +
-						'<div class="col-md-3">' +
-							'<div class="row placeholder">' +
-								'<div class="col-md-12"><a id="persentase">' + presentase + ' %</a></div>' +
-							'</div>' +
-							'<hr />' +
-							'<div class="row placeholder">' +
-								'<div class="col-md-12">' + hariKerja + ' Hari</div>' +
-							'</div>' +
-						'</div>' +
-						'<div class="col-md-6">' +
-							'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
-							'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
-							'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
-							'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
-						'</div>' +
+					'</div>' +
+					'<div class="col-md-4 col-xs-4">' +
+						'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
+						'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
+					'</div>' +
+					'<div class="col-md-4 col-xs-4">' +
+						'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
+						'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
 					'</div>' +
 				'</div>' +
 			'</div>';
 
 		}
+		
+		html += '</div>';
 
 		page.change( $( '#data-body' ), html );
 
