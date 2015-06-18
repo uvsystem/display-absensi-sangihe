@@ -462,6 +462,9 @@ var _monev = {
 	},
 	
 	setData: function ( list, pageNumber ) {
+
+		// Ubah judul pada panel data.
+		$( '#data-heading' ).html( '<b>MONITORING & EVALUASI PPA</b>' );
 		
 		var html = '';
 
@@ -480,9 +483,6 @@ var _monev = {
 		for ( var i = base; i < top; i++ ) {
 
 			var tmp = list[ i ];
-
-			// Ubah judul pada panel data.
-			$( '#data-heading' ).html( '<b>MONITORING & EVALUASI PPA</b>' );
 
 			// Implementasi seperti list-view.
 			html += '<div class="placeholder">' +

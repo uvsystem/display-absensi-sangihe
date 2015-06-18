@@ -51,7 +51,7 @@ var monevUrl = {
 	
 	printHost: 'core-unitedvision.whelastic.net',
 	
-		apiProject: 'monev',
+	apiProject: 'monev',
 	
 	printProject: 'monev',
 	
