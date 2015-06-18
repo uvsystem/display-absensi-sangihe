@@ -334,7 +334,7 @@ var _absensi = {
 			var tmp = list[ i ];
 
 			// Ubah judul pada panel data.
-			$( '#data-heading' ).html( tmp.bagian.nama );
+			$( '#data-heading' ).html( '<b>' + tmp.bagian.nama.toUpperCase() + '</b>' );
 
 			// Menentukan jumlah hari kerja dalam bulan berjalan (hariKerja),
 			// presentase kehadiran terhadap jumlah hari kerja (presentase),
@@ -357,16 +357,21 @@ var _absensi = {
 					'</div>' +
 					'<div class="col-md-2 col-xs-4">' +
 						'<div class="row">' +
-							'<div class="col-md-12"><p id="persentase" class="text-center">' + presentase + ' %</p></div>' +
+							'<div class="col-md-12">' +
+								'<p id="persentase" class="text-center">' + presentase + ' %</p>' +
+								'<p class="text-center">' + hariKerja + ' hari</p>' +
+							'</div>' +
 						'</div>' +
 					'</div>' +
 					'<div class="col-md-4 col-xs-4">' +
 						'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
 						'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
+						'<p>TAP : <b>' + ( tmp.terlambat ? tmp.terlambat : '-' ) + ' Hari</b></p>' +
 					'</div>' +
 					'<div class="col-md-4 col-xs-4">' +
 						'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
 						'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
+						'<p>TAS : <b>' + ( tmp.pulang ? tmp.pulang : '-' ) + ' Hari</b></p>' +
 					'</div>' +
 				'</div>' +
 			'</div>';
@@ -477,7 +482,7 @@ var _monev = {
 			var tmp = list[ i ];
 
 			// Ubah judul pada panel data.
-			$( '#data-heading' ).html( "Monitoring & Evaluasi PPA" );
+			$( '#data-heading' ).html( '<b>MONITORING & EVALUASI PPA</b>' );
 
 			// Implementasi seperti list-view.
 			html += '<div class="placeholder">' +
@@ -486,8 +491,8 @@ var _monev = {
 					'<div class="panel-body">' +
 						'<div class="col-md-12">' +
 							'<p>Jumlah Kegiatan : ' + ( tmp.jumlahKegiatan ? tmp.jumlahKegiatan : '-' ) + ' kegiatan</p>' +
-							'<p>Total Anggaran : Rp ' + ( tmp.totalAnggaran ? tmp.totalAnggaran : '-' ) + '</p>' +
-							'<p>Realisasi Anggaran : Rp ' + ( tmp.totalRealisasiAnggaran ? tmp.totalRealisasiAnggaran : '-' )+ '</p>' +
+							'<p>Total Anggaran : Rp ' + ( tmp.totalAnggaran ? number.addCommas( tmp.totalAnggaran ) : '-' ) + '</p>' +
+							'<p>Realisasi Anggaran : Rp ' + ( tmp.totalRealisasiAnggaran ? number.addCommas( tmp.totalRealisasiAnggaran ) : '-' )+ '</p>' +
 							'<p>Realisasi Fisik : ' + ( tmp.totalRealisasiFisik ? tmp.totalRealisasiFisik : '-' ) + ' %</p>' +
 						'</div>' +
 					'</div>' +

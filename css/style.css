@@ -66,17 +66,12 @@ h1 em {
   line-height: 1.1;
 }
 
-/** Pengumuman **/
-#pengumuman {
-  height: 200px;
-  background-color: #a00;
-  color: #fff;
-  _position: absolute;
-  border: 3px solid white;
+#header {
+	/* something here */
 }
 
-#header {
-	height: 100px;
+#logo {
+  height: 100px;
 }
 
 #image-hrm {
@@ -102,6 +97,7 @@ h1 em {
 
 #rss {
 	font-size: 14px;
+	font-size: 20px;
 	text-align: justify;
 	width: 100%;
 	height: 200px;
@@ -182,15 +178,24 @@ p.more {
 }
 
 #data {
-  /* something */
+  /*
+  height: 580px;
+  min-height: 550px;
+  */
 }
 
 #pengumuman {
-  height: 200px;
+  height: 300px;
+  background-color: #a00;
+  color: #fff;
 }
 
-#channel {
-  height: 350px;
+#channel  {
+  height: 400px;
+}
+
+#panel-channel-body {
+  height: 323px;
 }
 
 /** footer **/
