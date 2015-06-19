@@ -29,6 +29,18 @@ $( document ).ready( function () {
 
 	} );
 	
+	$( document ).on( 'click', '#btn-sppd', function() {
+
+		message.write( 'Fitur sedang dalam pengembangan' );
+
+	} );
+
+	$( document ).on( 'click', '#btn-sip', function() {
+
+		message.write( 'Fitur sedang dalam pengembangan' );
+
+	} );
+	
 	$( document ).on( 'change', '#opt-bulan', function() {
 
 		clearTimeout( data.timeoutVar );

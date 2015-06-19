@@ -8,12 +8,6 @@ h1 img {
 img {
 	border: 0;
 }
-a.nav {
-	color: #FFFFFF;
-}
-a.nav:hover {
-	color: #FFA405;
-}
 .left {
 	float: left;
 }
@@ -49,21 +43,22 @@ h1 em {
   top: -4px;
 }
 
-#nav li {
-  float: left;
-  background: url(../images/nav_left.gif) no-repeat;
-  list-style: none;
-}
-
 .nav {
   color: #FFFFFF;
-  font-size: 11px;
+  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
   display: block;
-  font-size: 25px;
   padding-top: 25px;
   line-height: 1.1;
+}
+
+a.nav:hover {
+	color: #FFA405;
+}
+
+.clock {
+  font-size: 30px;
 }
 
 #header {
