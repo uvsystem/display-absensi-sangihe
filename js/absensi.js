@@ -704,7 +704,7 @@ var _rss = {
 		setTimeout( function() {
 			_rss.itemIndex++;
 			_rss.viewDefault();
-		}, 7000);
+		}, 15000);
 
 	},
 	
