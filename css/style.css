@@ -185,7 +185,7 @@ p.more {
 }
 
 #pengumuman {
-  height: 300px;
+  min-height: 300px;
   background-color: #a00;
   color: #fff;
 }
