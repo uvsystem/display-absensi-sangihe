@@ -10,7 +10,7 @@ $( document ).ready( function () {
 	_absensi.loadDefaultLoader();
 	_absensi.load();
 
-	//_rss.viewDefault();
+	_rss.viewDefault();
 	clock.digital.renderTime();
 
 	// Handler
