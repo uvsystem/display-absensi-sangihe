@@ -1,16 +1,17 @@
 $( document ).ready( function () {
 	
-	$( '#opt-bulan' ).val( myDate.getBulanNama() );
-	$( '#opt-tahun' ).val( myDate.getTahun() );
+	var now = myDate.getNow();
+	$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
+	$( '#opt-tahun' ).val( now.year );
 	
 	// Halaman awal adalah absensi
 	pageName = 'absensi';
 
 	_absensi.loadDefaultLoader();
-
-	_rss.viewDefault();
-	clock.digital.renderTime();
 	_absensi.load();
+
+	//_rss.viewDefault();
+	clock.digital.renderTime();
 
 	// Handler
 	$( document ).on( 'click', '#btn-absensi', function() {
@@ -85,75 +86,50 @@ function joinList( list1, list2 ) {
 	
 };
 
-// Load data SKPD ke dalam list.
-function loadSkpd() {
+// Load data Unit Kerja ke dalam listLoader.
+function loadSatker( kode ) {
 
-	var object = {
-		path: '/skpd',
-		data: { },
-		method: 'GET',
-		success: function( result ) {
-
-			if ( result.tipe == 'LIST' )
-				listLoader = result.list;
-
-		},
-		error: message.error
-	};
-
-	rest.callAjaxFree( object );
+	unitKerjaRestAdapter.findSubUnit( kode, function( result ) {
+		if ( result.tipe == 'LIST' )
+			listLoader = result.list;
+	});
 };
 
-// Load data Bagian (berdasarkan skpd) ke dalam list.
-function loadBagian( idSkpd ) {
-
-	var object = {
-		path: '/bagian',
-		data: { },
-		method: 'GET',
-		success: function( result ) {
-
-			if ( result.tipe == 'LIST' )
-				listLoader = result.list;
-
-		},
-		error: message.error
-	};
-		
-	// Load bagian berdasarkan skpd, jika idSkpd ditemukan
-	if ( idSkpd )
-		object.path = '/bagian/skpd/' + idSkpd;
-		
-	rest.callAjaxFree( object );
-};
-	
+// Akan diisi dengan data sub-unit-kerja.
 var listLoader = [ ];
+
+// Secara default membuka halaman rekap absensi.
 var pageName = 'absensi';
 
+/**
+ * Load data rekap dari fungsi load masing-masing container.
+ * Jika loadNumber melebihi batas atas, kembali ke 0.
+ */
 function reloadLoadNumber( container ) {
-				
+
 	if ( ( data.loaderNumber + 1 ) < listLoader.length ) {
-					
+	
 		data.loaderNumber++;
-					
+
 	} else {
-					
+
 		data.loaderNumber = 0;
-					
+
 	}
-				
+
+	// Load rekap
 	container.load();
-				
+
 };
 
 function getColor( presentase ) {
-	
+
 	if ( presentase > 80 )
 		return 'success';
 	if ( presentase > 60 )
 		return 'warning';
 	return 'danger';
-	
+
 };
 	
 var data = {
@@ -245,17 +221,13 @@ var data = {
 	}
 
 };
-	
+
 var _absensi = {
 
 	loadDefaultLoader: function () {
 		
 		var tmpLoader = [];
-		loadBagian( 5 ); // Untuk semua bagian dalam suatu skpd
-		tmpLoader = joinList( tmpLoader, listLoader );
-		loadBagian( 6 ); // Untuk semua bagian dalam suatu skpd
-		tmpLoader = joinList( tmpLoader, listLoader );
-		loadBagian( 7 ); // Untuk semua bagian dalam suatu skpd
+		loadSatker( 'SETDA' ); // Untuk semua sub unit kerja dalam Sekretariat Daerah
 		tmpLoader = joinList( tmpLoader, listLoader );
 		
 		listLoader = tmpLoader;
@@ -264,7 +236,7 @@ var _absensi = {
 
 	reload: function() {
 		
-		message.writeLog( 'absensi.js:300: Reload absensi' );
+		message.writeLog( 'Reload absensi' ); // LOG
 		
 		pageName = 'absensi';
 
@@ -272,7 +244,8 @@ var _absensi = {
 		
 		$( '#opt-bulan' ).val( myDate.getBulanNama() );
 		$( '#opt-tahun' ).val( myDate.getTahun() );
-		
+
+		// Hapus automatic reload
 		clearTimeout( data.timeoutVar );
 		
 		data.loaderNumber = 0;
@@ -282,47 +255,33 @@ var _absensi = {
 	},
 
 	load: function () {
-			
+
 		var tmp = listLoader[ data.loaderNumber ];
-			
-		_absensi.loadData( tmp.id );
-			
+
+		_absensi.loadData( tmp.singkatan );
+
 	},
 
-	loadData: function ( id ) {
+	loadData: function ( kode ) {
 
 		var bulan = $( '#opt-bulan' ).val();
 		var tahun = $( '#opt-tahun' ).val();
 
 		var tanggalAwal = myDate.createFirstDate( bulan, tahun );
-		var awal = myDate.toFormattedString( tanggalAwal );
-
 		var tanggalAkhir = myDate.createLastDate( bulan, tahun );
-		var akhir = myDate.toFormattedString( tanggalAkhir );
-
-		var object = {
-			path: '/pegawai/rekap/bagian/' + id + '/' + awal + '/' + akhir,
-			data: { },
-			method: 'GET',
-			success: function( result ) {
-
-				if ( result.tipe == 'LIST' ) {
-
-					_absensi.setData( result.list, 0 );
-						
-				} else if ( result.tipe != 'ERROR' ) {
-						
-					reloadLoadNumber( _absensi );
-					
-				}
-			},
-			error: message.error
-		};
-
-		rest.callAjaxFree( object );
-
-	},
 		
+		message.writeLog( JSON.stringify( tanggalAwal ) );
+		message.writeLog( JSON.stringify( tanggalAkhir ) );
+		
+		absenRestAdapter.rekapBySatker( kode, tanggalAwal.getFormattedString(), tanggalAkhir.getFormattedString(), function( result ) {
+			if ( result.tipe == 'LIST' ) {
+				_absensi.setData( result.list, 0 );
+			} else if ( result.tipe != 'ERROR' ) {
+				reloadLoadNumber( _absensi );
+			}
+		});
+	},
+
 	setData: function ( list, pageNumber ) {
 		
 		var html = '';
@@ -346,21 +305,18 @@ var _absensi = {
 			var tmp = list[ i ];
 
 			// Ubah judul pada panel data.
-			$( '#data-heading' ).html( '<b>' + tmp.bagian.nama.toUpperCase() + '</b>' );
+			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
 
 			// Menentukan jumlah hari kerja dalam bulan berjalan (hariKerja),
 			// presentase kehadiran terhadap jumlah hari kerja (presentase),
 			// warna data sesuai presentase kehadiran (color).
 			var tahun = $( '#opt-tahun' ).val();
 			var bulan = $( '#opt-bulan' ).val();
-			var tanggal = myDate.createLastDate( bulan, tahun );
-			
-			var hariKerja = data.hariKerja.get( tanggal );
-			var presentase = Math.round( ( ( tmp.hadir / hariKerja ) * 100 ) );
-			var color = getColor( presentase );
 
+			message.writeLog(tmp.hadir/tmp.jumlahHari * 100);
+			
 			// Implementasi seperti list-view.
-			html += '<div class="list-group-item list-group-item-' + color + '">' +
+			html += '<div class="list-group-item list-group-item-' + getColor( tmp.presentase ) + '">' +
 				'<b class="list-group-item-heading">' + tmp.nip + ' - ' + tmp.nama + '</b>' +
 				'<br /><br />' +
 				'<div class="row">' +
@@ -370,20 +326,20 @@ var _absensi = {
 					'<div class="col-md-2 col-xs-4">' +
 						'<div class="row">' +
 							'<div class="col-md-12">' +
-								'<p id="persentase" class="text-center">' + presentase + ' %</p>' +
-								'<p class="text-center">' + hariKerja + ' hari</p>' +
+								'<p id="persentase" class="text-center">' + tmp.presentase + ' %</p>' +
+								'<p class="text-center">' + tmp.jumlahHari + ' hari</p>' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
 					'<div class="col-md-4 col-xs-4">' +
 						'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
 						'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
-						'<p>TAP : <b>' + ( tmp.terlambat ? tmp.terlambat : '-' ) + ' Hari</b></p>' +
+						'<p>TL : <b>' + ( tmp.tugasLuar ? tmp.tugasLuar : '-' ) + ' Hari</b></p>' +
 					'</div>' +
 					'<div class="col-md-4 col-xs-4">' +
 						'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
 						'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
-						'<p>TAS : <b>' + ( tmp.pulang ? tmp.pulang : '-' ) + ' Hari</b></p>' +
+						'<p>TAP : <b>' + ( tmp.terlambat ? tmp.terlambat : '-' ) + ' Hari</b></p>' +
 					'</div>' +
 				'</div>' +
 			'</div>';
@@ -417,7 +373,7 @@ var _absensi = {
 				
 		}
 	}
-		
+
 };
 
 var _monev = {
