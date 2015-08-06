@@ -12,8 +12,7 @@
  * Version: 1.0.0
  */
 
-var target1 = 'https://core-unitedvision.whelastic.net';
-var target = 'http://localhost:8080';
+var target = 'https://core-unitedvision.whelastic.net';
 var ehrmRestAdapter = rest( target, 'ehrm' );
 
 var unitKerjaRestAdapter = {
