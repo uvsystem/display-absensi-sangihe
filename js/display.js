@@ -8,26 +8,19 @@ $( document ).ready( function () {
 	pageName = 'absensi';
 
 	_absensi.loadDefaultLoader();
-	_absensi.load();
+	data.loadNumber = 0;
+	_absensi.load( data.loadNumber );
 
 	_rss.viewDefault();
 	clock.digital.renderTime();
 
 	// Handler
-	$( document ).on( 'click', '#btn-absensi', function() {
-
-		myUrl = absensiUrl;
-	
+	$( document ).on( 'click', '#btn-absensi', function() {	
 		_absensi.reload();
-				
 	} );
 
 	$( document ).on( 'click', '#btn-monev', function() {
-
-		myUrl = monevUrl;
-	
 		_monev.reload();
-
 	} );
 	
 	$( document ).on( 'click', '#btn-sppd', function() {
@@ -45,11 +38,12 @@ $( document ).ready( function () {
 	$( document ).on( 'change', '#opt-bulan', function() {
 
 		clearTimeout( data.timeoutVar );
+		data.loadNumber = 0;
 
 		if ( pageName == 'absensi') {
-			_absensi.load();
+			_absensi.load( data.loadNumber );
 		} else {
-			_monev.load();
+			_monev.load( data.loadNumber );
 		}
 		
 	} );
@@ -57,11 +51,12 @@ $( document ).ready( function () {
 	$( document ).on( 'change', '#opt-tahun', function() {
 
 		clearTimeout( data.timeoutVar );
+		data.loadNumber = 0;
 
 		if ( pageName == 'absensi') {
-			_absensi.load();
+			_absensi.load( data.loadNumber );
 		} else {
-			_monev.load();
+			_monev.load( data.loadNumber );
 		}
 		
 	} );
@@ -89,7 +84,7 @@ function joinList( list1, list2 ) {
 // Load data Unit Kerja ke dalam listLoader.
 function loadSatker( kode ) {
 
-	unitKerjaRestAdapter.findSubUnit( kode, function( result ) {
+	unitKerjaRestAdapter.findSubUnitAsync( kode, function( result ) {
 		if ( result.tipe == 'LIST' )
 			listLoader = result.list;
 	});
@@ -141,89 +136,14 @@ var data = {
 	tanggalAkhir: myDate.getNow(),
 	loaderNumber: 0, // Load mulai dari 0
 	timeout: 10000, // Rentang waktu untuk berganti data absen
-	timeoutVar: '',
-	
-	hariKerja: {
-
-		januari: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		februari: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		maret: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		april: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		mei: [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29],
-		juni: [ 1, 3, 4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 29, 30],
-		juli: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		agustus: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		september: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		oktober: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		november: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-		desember: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-
-		get: function( date ) {
-
-			var _month = parseInt( date.month );
-			var listHari;
-
-			switch( _month ) {
-				case 1: 
-					listHari = this.januari;
-					break;
-				case 2: 
-					listHari = this.februari;
-					break;
-				case 3: 
-					listHari = this.maret;
-					break;
-				case 4: 
-					listHari = this.april;
-					break;
-				case 5: 
-					listHari = this.mei;
-					break; 
-				case 6: 
-					listHari = this.juni;
-					break;
-				case 7: 
-					listHari = this.juli;
-					break;
-				case 8: 
-					listHari = this.agustus;
-					break;
-				case 9: 
-					listHari = this.september;
-					break;
-				case 10: 
-					listHari = this.oktober;
-					break;
-				case 11: 
-					listHari = this.november;
-					break;
-				case 12: 
-					listHari = this.desember;
-					break;
-			}
-			
-			if ( _month == myDate.getNow().month )
-				date = myDate.getNow();
-			
-			var _day = parseInt( date.day );
-			
-			while ( ! ( listHari.indexOf( _day ) ) || ( listHari.indexOf( _day ) < 1 ) ) {
-				
-				_day--;
-				
-				if ( _day == 0)
-					return 0;
-				
-			}
-			
-			return listHari.indexOf( _day ) + 1;
-		}
-	}
-
+	timeoutVar: ''
 };
 
 var _absensi = {
 
+	/**
+	 * Load semua sub-unit yang digunakan untuk mengambil data.
+	 */
 	loadDefaultLoader: function () {
 		
 		var tmpLoader = [];
@@ -236,30 +156,30 @@ var _absensi = {
 
 	reload: function() {
 		
-		message.writeLog( 'Reload absensi' ); // LOG
+		message.writeLog( 'Reload Absensi' ); // LOG
 		
 		pageName = 'absensi';
 
 		_absensi.loadDefaultLoader();
 		
-		$( '#opt-bulan' ).val( myDate.getBulanNama() );
-		$( '#opt-tahun' ).val( myDate.getTahun() );
+		var now = myDate.getNow();
+		$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
+		$( '#opt-tahun' ).val( now.year );
 
 		// Hapus automatic reload
 		clearTimeout( data.timeoutVar );
 		
 		data.loaderNumber = 0;
-		
-		_absensi.load();
+		_absensi.load( data.loadNumber );
 		
 	},
 
-	load: function () {
-
-		var tmp = listLoader[ data.loaderNumber ];
-
+	load: function ( loadNumber ) {
+		if ( !loadNumber )
+			loadNumber = data.loaderNumber;
+		
+		var tmp = listLoader[ loadNumber ];
 		_absensi.loadData( tmp.singkatan );
-
 	},
 
 	loadData: function ( kode ) {
@@ -269,9 +189,6 @@ var _absensi = {
 
 		var tanggalAwal = myDate.createFirstDate( bulan, tahun );
 		var tanggalAkhir = myDate.createLastDate( bulan, tahun );
-		
-		message.writeLog( JSON.stringify( tanggalAwal ) );
-		message.writeLog( JSON.stringify( tanggalAkhir ) );
 		
 		absenRestAdapter.rekapBySatker( kode, tanggalAwal.getFormattedString(), tanggalAkhir.getFormattedString(), function( result ) {
 			if ( result.tipe == 'LIST' ) {
@@ -306,14 +223,6 @@ var _absensi = {
 
 			// Ubah judul pada panel data.
 			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
-
-			// Menentukan jumlah hari kerja dalam bulan berjalan (hariKerja),
-			// presentase kehadiran terhadap jumlah hari kerja (presentase),
-			// warna data sesuai presentase kehadiran (color).
-			var tahun = $( '#opt-tahun' ).val();
-			var bulan = $( '#opt-bulan' ).val();
-
-			message.writeLog(tmp.hadir/tmp.jumlahHari * 100);
 			
 			// Implementasi seperti list-view.
 			html += '<div class="list-group-item list-group-item-' + getColor( tmp.presentase ) + '">' +
@@ -373,67 +282,59 @@ var _absensi = {
 				
 		}
 	}
-
 };
 
 var _monev = {
 	
 	loadDefaultLoader: function () {
 		
-		throw new Error( 'Not Supported' );
+		var tmpLoader = [];
+		loadSatker( 'SETDA' ); // Untuk semua sub unit kerja dalam Sekretariat Daerah
+		tmpLoader = joinList( tmpLoader, listLoader );
+		
+		listLoader = tmpLoader;
 		
 	},
 	
 	reload: function() {
 		
-		message.writeLog( 'absensi.js:452: Reload monev' );
+		message.writeLog( 'Reload Monev' );
 
 		pageName = 'monev';
 		
-		$( '#opt-bulan' ).val( myDate.getBulanNama() );
-		$( '#opt-tahun' ).val( myDate.getTahun() );
+		var now = myDate.getNow();
+		$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
+		$( '#opt-tahun' ).val( now.year );
 		
 		clearTimeout( data.timeoutVar );
 		
-		data.loaderNumber = 0;
-		
-		_monev.load();
-		
-		
+		data.loaderNumber = 0;		
+		_monev.load( data.loadNumber );
+
 	},
 	
-	load: function() {
-			
-		_monev.loadData();
-			
+	load: function( loadNumber ) {
+		if ( !loadNumber )
+			loadNumber = data.loadNumber;
+		
+		var tmp = listLoader[ loadNumber ];
+		_monev.loadData( tmp.singkatan );
 	},
 	
-	loadData: function ( id ) {
-
-		var object = {
-			path: '/skpd/rekap/',
-			data: { },
-			method: 'GET',
-			success: function( result ) {
-
-				if ( result.tipe == 'LIST' ) {
-
-					_monev.setData( result.list, 0 );
-					
-				}
-			},
-			error: message.error
-		};
-
-		rest.callAjaxFree( object );
-
+	loadData: function ( kode ) {
+		var now = myDate.getNow();
+	
+		kegiatanRestAdapter.rekapBySatker( now.year, kode, function( result ) {
+			if ( result.tipe == 'LIST' ) {
+				_monev.setData( result.list, 0 );
+			} else if ( result.tipe != 'ERROR' ) {
+				reloadLoadNumber( _monev );
+			}
+		});
 	},
 	
 	setData: function ( list, pageNumber ) {
 
-		// Ubah judul pada panel data.
-		$( '#data-heading' ).html( '<b>MONITORING & EVALUASI PPA</b>' );
-		
 		var html = '';
 
 		// Menentukan batas bawah dari data yang akan ditampilkan, sesuai nomor halaman dan jumlah data ddalam sekali tampil.
@@ -452,17 +353,22 @@ var _monev = {
 
 			var tmp = list[ i ];
 
+			// Ubah judul pada panel data.
+			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
+
 			// Implementasi seperti list-view.
-			html += '<div class="placeholder">' +
-				'<div class="panel panel-default">' +
-					'<div class="panel-heading">' + tmp.nama + '</div>' +
-					'<div class="panel-body">' +
-						'<div class="col-md-12">' +
-							'<p>Jumlah Kegiatan : ' + ( tmp.jumlahKegiatan ? tmp.jumlahKegiatan : '-' ) + ' kegiatan</p>' +
-							'<p>Total Anggaran : Rp ' + ( tmp.totalAnggaran ? number.addCommas( tmp.totalAnggaran ) : '-' ) + '</p>' +
-							'<p>Realisasi Anggaran : Rp ' + ( tmp.totalRealisasiAnggaran ? number.addCommas( tmp.totalRealisasiAnggaran ) : '-' )+ '</p>' +
-							'<p>Realisasi Fisik : ' + ( tmp.totalRealisasiFisik ? tmp.totalRealisasiFisik : '-' ) + ' %</p>' +
-						'</div>' +
+			html += '<div class="list-group-item">' +
+				'<b class="list-group-item-heading">' + tmp.namaKegiatan + '</b>' +
+				'<br /><br />' +
+				'<div class="row">' +
+					'<div class="col-md-4" col-xs-12>' +
+					'<img src="images/default.jpg" height="100%" width="100%">' +
+					'</div>' +
+					'<div class="col-md-8 col-xs-4">' +
+						'<p>Program: <b>' + ( tmp.namaProgram ? tmp.namaProgram : '-' ) + '</b></p>' +
+						'<p>Pagu Anggaran: <b>Rp ' + ( tmp.paguAnggaran ? tmp.paguAnggaran : '-' ) + '</b></p>' +
+						'<p>Realisasi Anggaran: <b>Rp ' + ( tmp.realisasiAnggaran ? tmp.realisasiAnggaran : '-' ) + '</b></p>' +
+						'<p>Realisasi Pencapaian: <b>' + ( tmp.realisasiFisik ? tmp.realisasiFisik : '-' ) + ' %</b></p>' +
 					'</div>' +
 				'</div>' +
 			'</div>';
@@ -478,14 +384,22 @@ var _monev = {
 
 			// Reload data dari list yang sama.
 			data.timeoutVar = setTimeout( function() {
-
+					
 				_monev.setData( list, ++pageNumber );
-
+					
 			}, data.timeout );
+				
+		} else {
 
+			// Reload list baru dari server.
+			data.timeoutVar = setTimeout( function() { 
+			
+				reloadLoadNumber( _monev );
+				
+			}, data.timeout );
+				
 		}
 	}
-	
 };
 
 var clock = {
