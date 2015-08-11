@@ -1,3 +1,9 @@
+/* display.js
+ *
+ * Deddy Christoper Kakunsi
+ * deddy.kakunsi@gmail.com
+ */
+
 $( document ).ready( function () {
 	
 	var now = myDate.getNow();
@@ -24,9 +30,7 @@ $( document ).ready( function () {
 	} );
 	
 	$( document ).on( 'click', '#btn-sppd', function() {
-
-		message.write( 'Fitur sedang dalam pengembangan' );
-
+		_sppd.reload();
 	} );
 
 	$( document ).on( 'click', '#btn-sip', function() {
@@ -60,7 +64,6 @@ $( document ).ready( function () {
 		}
 		
 	} );
-	
 });
 
 function joinList( list1, list2 ) {
@@ -395,6 +398,122 @@ var _monev = {
 			data.timeoutVar = setTimeout( function() { 
 			
 				reloadLoadNumber( _monev );
+				
+			}, data.timeout );
+				
+		}
+	}
+};
+
+var _sppd = {
+	
+	loadDefaultLoader: function () {
+		
+		var tmpLoader = [];
+		loadSatker( 'SETDA' ); // Untuk semua sub unit kerja dalam Sekretariat Daerah
+		tmpLoader = joinList( tmpLoader, listLoader );
+		
+		listLoader = tmpLoader;
+		
+	},
+	
+	reload: function() {
+		
+		message.writeLog( 'Reload SPPD' );
+
+		pageName = 'sppd';
+		
+		var now = myDate.getNow();
+		$( '#opt-bulan' ).prop( 'readonly', true );
+		$( '#opt-tahun' ).val( now.year );
+		
+		clearTimeout( data.timeoutVar );
+		
+		data.loaderNumber = 0;		
+		_sppd.load( data.loadNumber );
+
+	},
+	
+	load: function( loadNumber ) {
+		if ( !loadNumber )
+			loadNumber = data.loadNumber;
+		
+		var tmp = listLoader[ loadNumber ];
+		_sppd.loadData( tmp.singkatan );
+	},
+	
+	loadData: function ( kode ) {
+		var now = myDate.getNow();
+	
+		sppdRestAdapter.rekap( now.year, function( result ) {
+			if ( result.tipe == 'LIST' ) {
+				_sppd.setData( result.list, 0 );
+			} else if ( result.tipe != 'ERROR' ) {
+				reloadLoadNumber( _sppd );
+			}
+		});
+	},
+	
+	setData: function ( list, pageNumber ) {
+
+		var html = '';
+
+		// Menentukan batas bawah dari data yang akan ditampilkan, sesuai nomor halaman dan jumlah data ddalam sekali tampil.
+		// base adalah index pada list yang akan digunakan sebagai batas bawah.
+		var base = ( pageNumber * data.tableSize );
+		
+		// Menentukan batas atas dari data yang akan ditampilkan, sesuai index batas bawah dan jumlah data dalam sekali tampil.
+		// top adalah index pada list yang akan digunakan sebagai batas atas.
+		var top = base + data.tableSize;
+
+		// Gunakan index akhir list, jika batas atas lebih besar.
+		if ( top > list.length )
+			top = list.length;
+			
+		for ( var i = base; i < top; i++ ) {
+
+			var tmp = list[ i ];
+
+			// Ubah judul pada panel data.
+			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
+
+			// Implementasi seperti list-view.
+			html += '<div class="list-group-item">' +
+				'<b class="list-group-item-heading">' + tmp.nama + '</b>' +
+				'<br /><br />' +
+				'<div class="row">' +
+					'<div class="col-md-4" col-xs-12>' +
+					'<img src="images/default.jpg" height="100%" width="100%">' +
+					'</div>' +
+					'<div class="col-md-8 col-xs-4">' +
+						'<p>Jumlah SPPD: <b>' + tmp.jumlahSppd + '</b></p>' +
+						'<p>Jumlah Tugas Luar: <b>' + tmp.jumlahTugasLuar + ' Hari</b></p>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+
+		}
+
+		page.change( $( '#data-body' ), html );
+
+		// Menentukan sisa data yang masih akan ditampilkan.
+		var sisa = list.length - ( top );
+
+		if ( sisa > 0 ) {
+
+			// Reload data dari list yang sama.
+			data.timeoutVar = setTimeout( function() {
+					
+				_sppd.setData( list, ++pageNumber );
+					
+			}, data.timeout );
+				
+		} else {
+
+			// Reload list baru dari server.
+			data.timeoutVar = setTimeout( function() { 
+			
+				reloadLoadNumber( _sppd );
 				
 			}, data.timeout );
 				
