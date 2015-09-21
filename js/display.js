@@ -318,19 +318,24 @@ var _monev = {
 	
 	load: function( loadNumber ) {
 		if ( !loadNumber )
-			loadNumber = data.loadNumber;
+			loadNumber = data.loaderNumber;
 		
 		var tmp = listLoader[ loadNumber ];
-		_monev.loadData( tmp.singkatan );
+		_monev.loadData( tmp );
 	},
 	
-	loadData: function ( kode ) {
+	loadData: function ( satker ) {
+
+		// Ubah judul pada panel data.
+		$( '#data-heading' ).html( '<b>' + satker.nama.toUpperCase() + '</b>' );
+
 		var now = myDate.getNow();
 	
-		kegiatanRestAdapter.rekapBySatker( now.year, kode, function( result ) {
-			if ( result.tipe == 'LIST' ) {
+		kegiatanRestAdapter.rekapBySatker( now.year, satker.singkatan, function( result ) {
+			
+			if ( result.list.length >= 0 ) {
 				_monev.setData( result.list, 0 );
-			} else if ( result.tipe != 'ERROR' ) {
+			} else {
 				reloadLoadNumber( _monev );
 			}
 		});
