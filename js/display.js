@@ -129,7 +129,7 @@ function getColor( presentase ) {
 	return 'danger';
 
 };
-	
+
 var data = {
 	idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
 	tableSize: 4, // Jumlah table untuk setiap waktu
@@ -238,7 +238,7 @@ var _absensi = {
 					'<div class="col-md-2 col-xs-4">' +
 						'<div class="row">' +
 							'<div class="col-md-12">' +
-								'<p id="persentase" class="text-center">' + tmp.presentase + ' %</p>' +
+								'<p id="persentase" class="text-center">' + Math.round( tmp.presentase ) + ' %</p>' +
 								'<p class="text-center">' + tmp.jumlahHari + ' hari</p>' +
 							'</div>' +
 						'</div>' +
@@ -756,3 +756,4 @@ var _rss = {
 	}
 	
 }
+
