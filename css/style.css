@@ -8,12 +8,6 @@ h1 img {
 img {
 	border: 0;
 }
-a {
-	color: #FFFFFF;
-}
-a:hover {
-	color: #FFA405;
-}
 .left {
 	float: left;
 }
@@ -27,25 +21,12 @@ a:hover {
 	clear: both;
 }
 
-html {
-	background: transparent;
-}
-
 body {
 	background: #3A0404 url(../images/page_bg.jpg) repeat-x;
 	/** background-color: #800; **/
-	font: 11px arial, sans-serif;
+	font: 15px arial, sans-serif;
 	color: #464544;
 	padding-bottom: 10px;
-}
-
-/** layout **/
-#wrapper {
-	width: 678px;
-	min-height: 750px;
-	_height: 750px;
-	background: url(../images/header.jpg) no-repeat;
-  position: relative;
 }
 
 h1 {
@@ -62,68 +43,30 @@ h1 em {
   top: -4px;
 }
 
-/* nav */
-
-#nav {
-  position: absolute;
-  top: 0px;
-  left: 15px;
-  width: 500px;
-}
-#nav li {
-  float: left;
-  background: url(../images/nav_left.gif) no-repeat;
-  list-style: none;
-  padding-left: 10px;
-  padding-right: 20px;
-  padding-top: 45px;
-  line-height: 1.1;
-}
-#nav span {
-  display: block;
-  font-size: 28px;
-}
-#nav a {
+.nav {
   color: #FFFFFF;
-  font-size: 11px;
+  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
+  display: block;
+  padding-top: 25px;
+  line-height: 1.1;
 }
 
-/** topcontent **/
-
-#topcon {
-  background-color: #a00;
-  position: absolute;
-  top: 0px;
-  left: 50px;
-  color: #fff;
-  height: 200px;
-}
-#topcon-inner {
-  margin: 33px 40px 41px 85px;
-  height: 120px;
-  overflow: auto;
-}
-#topcon h2 {
-  font-size: 14px;
+a.nav:hover {
+	color: #FFA405;
 }
 
-#top-content {
-	left: 50px;
-}
-
-/** Pengumuman **/
-#pengumuman {
-  height: 200px;
-  background-color: #a00;
-  color: #fff;
-  _position: absolute;
-  border: 3px solid white;
+.clock {
+  font-size: 30px;
 }
 
 #header {
-	height: 100px;
+	/* something here */
+}
+
+#logo {
+  height: 100px;
 }
 
 #image-hrm {
@@ -149,6 +92,7 @@ h1 em {
 
 #rss {
 	font-size: 14px;
+	font-size: 20px;
 	text-align: justify;
 	width: 100%;
 	height: 200px;
@@ -192,62 +136,8 @@ h1 em {
   padding: 18px;
 }
 
-.box {
-  float: left;
-  width: 195px;
-  background: #730F11;
-  margin-right: 18px;
-}
-.box-t { background: top url(../images/box_t.gif) repeat-x; }
-.box-r { background: right url(../images/box_r.gif) repeat-y; }
-.box-b { background: bottom url(../images/box_b.gif) repeat-x; }
-.box-l { background: left url(../images/box_l.gif) repeat-y; }
-.box-tr { background: top right url(../images/box_tr.gif) no-repeat; }
-.box-br { background: bottom right url(../images/box_br.gif) no-repeat; }
-.box-bl { background: bottom left url(../images/box_bl.gif) no-repeat; }
-.box-tl { background: top left url(../images/box_tl.gif) no-repeat; }
-
-.box-tl {
-  padding: 13px 18px;
-}
-
-.box p {
-  margin: 1em 0;
-}
-
 p.more {
   margin: 0;
-}
-
-#hits {
-  width: 240px;
-}
-#hits .box-tl {
-  padding-bottom: 22px;
-}
-#hits ul {
-  margin: 1em 0;
-}
-#hits li {
-  list-style: none;
-  margin: 0.9em 0;
-}
-#hits ul a {
-  text-decoration: none;
-}
-#hits ul a:hover {
-  text-decoration: underline;
-}
-
-#new {
-  margin-right: 0;
-}
-#new .box-tl {
-  padding-bottom: 18px;
-}
-#new p {
-  margin-top: 0;
-  margin-bottom: 3.6em;
 }
 
 #body h2 {
@@ -272,6 +162,37 @@ p.more {
   margin-top: 1em;
 }
 
+#img-hrm {
+  height: 100%;
+  width: 100%;
+}
+
+#persentase {
+  style: none;
+  font-size: 20px;
+}
+
+#data {
+  /*
+  height: 580px;
+  min-height: 550px;
+  */
+}
+
+#pengumuman {
+  min-height: 300px;
+  background-color: #a00;
+  color: #fff;
+}
+
+#channel  {
+  height: 400px;
+}
+
+#panel-channel-body {
+  height: 323px;
+}
+
 /** footer **/
 #footer {
   text-align: center;
@@ -287,35 +208,7 @@ p.more {
   list-style: none;
 }
 
-/** Deddy dat tambah, Bootstrap table color **/
-.table tbody tr > td.success {
-  background-color: #dff0d8 !important;
-}
-
-.table tbody > tr.error {
-  background-color: #f2dede !important;
-}
-
-.table tbody > tr.warning {
-  background-color: #fcf8e3 !important;
-}
-
-.table tbody > tr.info {
-  background-color: #d9edf7 !important;
-}
-
-.table-hover tbody:hover > tr.success {
-  background-color: #d0e9c6 !important;
-}
-
-.table-hover tbody:hover > tr.error {
-  background-color: #ebcccc !important;
-}
-
-.table-hover tbody:hover > tr.warning {
-  background-color: #faf2cc !important;
-}
-
-.table-hover tbody:hover > tr.info {
-  background-color: #c4e3f3 !important;
+/* needed for bootstrap to work */
+html {
+	background: transparent;
 }

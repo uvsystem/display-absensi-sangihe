@@ -8,14 +8,15 @@
  * 
  * Version: 1.1.1
  */
- 
-var myUrl = {
+
+// URL untuk server absensi.
+var absensiUrl = {
 
 	protocol: 'https',
 	
 	apiHost: 'core-unitedvision.whelastic.net',
 	
-	printHost: this.apiHost,
+	printHost: 'core-unitedvision.whelastic.net',
 	
 	apiProject: 'absensi',
 	
@@ -40,6 +41,42 @@ var myUrl = {
 	}
 	
 };
+
+// URL untuk server monev. 
+var monevUrl = {
+
+	protocol: 'https',
+	
+	apiHost: 'core-unitedvision.whelastic.net',
+	
+	printHost: 'core-unitedvision.whelastic.net',
+	
+	apiProject: 'monev',
+	
+	printProject: 'monev',
+	
+	apiUrl: function( ) {
+	
+		return this.protocol + '://' + this.apiHost + '/' + this.apiProject;
+		
+	},
+	
+	printUrl: function( credential ) {
+	
+		return this.protocol + '://' + credential + this.printHost + '/' + this.printProject;
+		
+	},
+	
+	secureUrl: function( credential ) {
+	
+		return this.protocol + '://' + credential + '@' + this.apiHost + '/' + this.apiProject;
+		
+	}
+	
+};
+
+// URL server.
+var myUrl = absensiUrl;
 
 var waitModal;
 
@@ -927,6 +964,30 @@ var myDate = {
 			}
 		},
 		
+		getNama: function ( index ) {
+
+			if ( index > 12 )
+				index -= 12;
+			
+			if ( index < 1 )
+				index += 12;
+
+			switch ( index ) {
+				case 1: return 'Januari'
+				case 2: return 'Februari'
+				case 3: return 'Maret'
+				case 4: return 'April'
+				case 5: return 'Mei'
+				case 6: return 'Juni'
+				case 7: return 'Juli'
+				case 8: return 'Agustus'
+				case 9: return 'September'
+				case 10: return 'Oktober'
+				case 11: return 'November'
+				case 12: return 'Desember'
+			}
+		},
+		
 		getRealName: function ( name ) {
 			
 			name = name.toLowerCase ();
@@ -1054,6 +1115,14 @@ var myDate = {
 		
 	},
 	
+	getBulanNama: function() {
+		
+		var bulan = myDate.getBulan();
+		
+		return myDate.month.getNama( bulan );
+		
+	},
+	
 	getTahun: function() {
 		
 		var date = new Date();
@@ -1165,6 +1234,19 @@ var myDate = {
 		return ( number > comparerNumber );
 	},
 
+	// date adalah hari terakhir.
+	isThisMonth: function( date ) {
+		
+		var now = this.getNow();
+		
+		if ( now.year == date.year &&
+				now.month == date.month )
+			return true;
+
+		return false;
+		
+	},
+	
 	formatDate: function ( unformattedDate ) {
 
 		var tmp = this.fromDate( unformattedDate );
@@ -1192,14 +1274,16 @@ var myDate = {
 
 	createLastDate: function( bulan, tahun ) {
 		
+		var indexBulan = this.month.getIndex( bulan );
+
 		var date = new Date();
-		date.setMonth( bulan );
+		date.setMonth( indexBulan );
 		date.setDate( 0 );
 		date.setFullYear( tahun );
 
 		return {
 			day: date.getDate(),
-			month: bulan,
+			month: this.month.getIndex( bulan ),
 			year: tahun
 		};
 	},
