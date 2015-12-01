@@ -17,82 +17,25 @@
 					<div class="col-md-6 col-xs-12" id="logo">
 						<img id="image-hrm" src="images/logo.jpg" alt="HRM">
 					</div>
-					<div class="col-md-2 col-xs-4">
-						<a class="nav text-center" id="btn-absensi" href="#"><span>e-Absensi</span></a>
-						<a class="nav text-center" id="btn-monev" href="#"><span>e-Monev</span></a>
-					</div>
-					<div class="col-md-2 col-xs-4">
-						<a class="nav text-center" id="btn-sppd" href="#"><span>e-SPPD</span></a>
-						<a class="nav text-center" id="btn-sip" href="#"><span>SIP</span></a>
-					</div>
-					<div class="col-md-2 col-xs-4">
-						<a class="nav clock text-center"><span id="watch">00:00:00</span> </a>
+					<div class="col-md-6 col-xs-12">
+						<b class="nav clock text-center"><span id="watch">00:00:00</span> </b>
 					</div>
 				</div>
 
-				<div class="row placeholder"><!-- content -->
-					<div class="col-md-6"><!-- primary content -->
-						<div class="panel panel-primary" id="data">
-							<div class="panel-heading" id="data-heading">
-								<b>Nama Unit Kerja</b>
-							</div>
-							<div class="panel-body" id="data-body">Data</div>
-							<div class="panel-footer" id="data-footer">
-								<div class="row">
-									<div class="col-md-6 col-xs-6">
-										<input id="opt-bulan" class="form-control" type="text" list="list-bulan" placeholder="Masukan Bulan" />
-										<datalist id="list-bulan">
-											<option>JANUARI</option>
-											<option>FEBRUARI</option>
-											<option>MARET</option>
-											<option>APRIL</option>
-											<option>MEI</option>
-											<option>JUNI</option>
-											<option>JULI</option>
-											<option>AGUSTUS</option>
-											<option>SEPTEMBER</option>
-											<option>OKTOBER</option>
-											<option>NOVEMBER</option>
-											<option>DESEMBER</option>
-										</datalist>
-									</div>
-									<div class="col-md-6 col-xs-6">
-										<input id="opt-tahun" class="form-control" type="text" placeholder="Masukan Tahun" />
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6"><!-- secondary content -->
-						<div class="row"><!-- Info -->
-							<div class="panel panel-primary" id="pengumuman">
-								<div class="panel-heading">
-									<b>PENGUMUMAN</b>
-								</div>
-								<div class="panel-body" id="rss"></div>
-							</div>
-						</div><!-- Info -->
-						<div class="row" id="channel"><!-- Channel -->
-							<div class="panel panel-primary" id="panel-channel">
-								<div class="panel-heading">
-									<b>SANGIHE CHANNEL</b>
-								</div>
-								<div class="panel-body" id="panel-channel-body">
-									<!--
-									<iframe width="100%" height="100%" src="https://www.youtube.com/embed/oBOqefM-9uc?autoplay=1" frameborder="0" allowfullscreen></iframe>
-									-->
-									<iframe width="100%" height="100%" src="https://www.youtube.com/embed/videoseries?list=PLvSNwI1CRsdv7Yb2rSwErSXac6O1xsSWt" frameborder="0" allowfullscreen></iframe>
-								</div>
-							</div>
-						</div>
-					</div><!-- Secondary content -->
+				<div class="row placeholder" id="isi"><!-- content -->
 				</div><!-- Content -->
+
+				<div class="row placeholder"><!-- pengumuman -->
+					<div class="col-md-12">
+						<marquee id="running-text">Hello!</marquee>
+					</div>
+				</div><!-- ./pengumuman -->
 
 				<div class="row placeholder"><!-- footer -->
 					<div class="col-md-12">
 						<div id="footer">
 							<p>
-								&copy; <a href="#">Sangihe Channel</a> | 
+								&copy; <a href="#" id="home-link">Sangihe Channel</a> | 
 								<a href="https://uvs.web.id/ehrm/">eHRM</a> | 
 								<a href="https://uvs.web.id/monev/">eMonev</a> | 
 								powered by <a href="http://www.sangihekab.go.id">Pemerintah Kabupaten Kepulauan Sangihe</a>

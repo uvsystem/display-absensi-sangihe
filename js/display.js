@@ -6,39 +6,22 @@
 
 $( document ).ready( function () {
 	
-	var now = myDate.getNow();
-	$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
-	$( '#opt-tahun' ).val( now.year );
-	
-	// Halaman awal adalah absensi
-	pageName = 'absensi';
-
-	_absensi.loadDefaultLoader();
-	data.loadNumber = 0;
-	_absensi.load( data.loadNumber );
-
-	_rss.viewDefault();
+	/*
+	 * Render jam
+	 */
 	clock.digital.renderTime();
+	
+	/*
+	 * Load halaman home dari html/home.html
+	 */
+	page.load( $( '#isi' ), 'html/home.html' );
+
+	/*
+	 * Load pengumuman menggunakan RSS dan tampilkan pada running text
+	 */
+	_rss.view( $( '#running-text' ), 'http://www.antaranews.com/rss/nas.xml',  '{title} - ', 1 );
 
 	// Handler
-	$( document ).on( 'click', '#btn-absensi', function() {	
-		_absensi.reload();
-	} );
-
-	$( document ).on( 'click', '#btn-monev', function() {
-		_monev.reload();
-	} );
-	
-	$( document ).on( 'click', '#btn-sppd', function() {
-		_sppd.reload();
-	} );
-
-	$( document ).on( 'click', '#btn-sip', function() {
-
-		message.write( 'Fitur sedang dalam pengembangan' );
-
-	} );
-	
 	$( document ).on( 'change', '#opt-bulan', function() {
 
 		clearTimeout( data.timeoutVar );
@@ -64,6 +47,60 @@ $( document ).ready( function () {
 		}
 		
 	} );
+
+	$( document ).on( 'click', '#absensi-lengkap', function() {
+		pageName = 'absensi';
+
+		/*
+		 * Load halaman home dari html/home.html
+		 */
+		page.load( $( '#isi' ), 'html/detail.html' );
+
+		_absensi.reload();
+	});
+
+	$( document ).on( 'click', '#monev-lengkap', function() {
+		pageName = 'monev';
+
+		/*
+		 * Load halaman home dari html/home.html
+		 */
+		page.load( $( '#isi' ), 'html/detail.html' );
+		
+		_monev.reload();
+	});
+
+	$( document ).on( 'click', '#sppd-lengkap', function() {
+		pageName = 'sppd';
+
+		/*
+		 * Load halaman home dari html/home.html
+		 */
+		page.load( $( '#isi' ), 'html/detail.html' );
+		
+		_sppd.reload();
+	});
+
+	$( document ).on( 'click', '#berita-lengkap', function() {
+		/*
+		 * Load halaman home dari html/home.html
+		 */
+		page.load( $( '#isi' ), 'html/detail.html' );
+		loadDate();
+		
+		$( '#data-heading' ).html( '<b>BERITA</b>' );
+		_rss.view( $( '#data-body' ), 'http://www.antaranews.com/rss/nas.xml', 
+			'<div class="col-md-6 col-xs-12"><p><a href="{url}">{title}</a></p></div>', 20 );
+	});
+
+	$( document ).on( 'click', '#home-link', function() {
+		/*
+		 * Load halaman home dari html/home.html
+		 */
+		page.load( $( '#isi' ), 'html/home.html' );
+		
+	});
+	
 });
 
 function joinList( list1, list2 ) {
@@ -97,7 +134,7 @@ function loadSatker( kode ) {
 var listLoader = [ ];
 
 // Secara default membuka halaman rekap absensi.
-var pageName = 'absensi';
+var pageName = 'home';
 
 /**
  * Load data rekap dari fungsi load masing-masing container.
@@ -130,9 +167,15 @@ function getColor( presentase ) {
 
 };
 
+function loadDate() {
+	var now = myDate.getNow();
+	$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
+	$( '#opt-tahun' ).val( now.year );
+};
+
 var data = {
 	idSkpd: null, // Ganti null dengan id, jika spesifik untuk SKPD tertentu
-	tableSize: 4, // Jumlah table untuk setiap waktu
+	tableSize: 6, // Jumlah table untuk setiap waktu
 	currentPage: 0,
 	pilih: 'skpd',
 	tanggalAwal: myDate.getNow(),
@@ -154,27 +197,19 @@ var _absensi = {
 		tmpLoader = joinList( tmpLoader, listLoader );
 		
 		listLoader = tmpLoader;
-		
 	},
 
 	reload: function() {
 		
 		message.writeLog( 'Reload Absensi' ); // LOG
+		loadDate();
 		
-		pageName = 'absensi';
-
-		_absensi.loadDefaultLoader();
-		
-		var now = myDate.getNow();
-		$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
-		$( '#opt-tahun' ).val( now.year );
-
 		// Hapus automatic reload
 		clearTimeout( data.timeoutVar );
-		
+
+		this.loadDefaultLoader();
 		data.loaderNumber = 0;
-		_absensi.load( data.loadNumber );
-		
+		this.load( data.loadNumber );
 	},
 
 	load: function ( loadNumber ) {
@@ -182,7 +217,7 @@ var _absensi = {
 			loadNumber = data.loaderNumber;
 		
 		var tmp = listLoader[ loadNumber ];
-		_absensi.loadData( tmp.singkatan );
+		this.loadData( tmp.singkatan );
 	},
 
 	loadData: function ( kode ) {
@@ -228,31 +263,22 @@ var _absensi = {
 			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
 			
 			// Implementasi seperti list-view.
-			html += '<div class="list-group-item list-group-item-' + getColor( tmp.presentase ) + '">' +
+			html += '<div class="col-md-6 col-xs-12 list-group-item list-group-item-' + getColor( tmp.presentase ) + '">' +
 				'<b class="list-group-item-heading">' + tmp.nip + ' - ' + tmp.nama + '</b>' +
 				'<br /><br />' +
-				'<div class="row">' +
-					'<div class="col-md-2" col-xs-12>' +
-					'<img src="images/default.jpg" height="100%" width="100%">' +
-					'</div>' +
-					'<div class="col-md-2 col-xs-4">' +
-						'<div class="row">' +
-							'<div class="col-md-12">' +
-								'<p id="persentase" class="text-center">' + Math.round( tmp.presentase ) + ' %</p>' +
-								'<p class="text-center">' + tmp.jumlahHari + ' hari</p>' +
-							'</div>' +
-						'</div>' +
-					'</div>' +
-					'<div class="col-md-4 col-xs-4">' +
-						'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
-						'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
-						'<p>TL : <b>' + ( tmp.tugasLuar ? tmp.tugasLuar : '-' ) + ' Hari</b></p>' +
-					'</div>' +
-					'<div class="col-md-4 col-xs-4">' +
-						'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
-						'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
-						'<p>TAP : <b>' + ( tmp.terlambat ? tmp.terlambat : '-' ) + ' Hari</b></p>' +
-					'</div>' +
+				'<div class="col-md-2 col-xs-4">' +
+					'<div class="row"><h2>' + Math.round( tmp.presentase ) + '%</h2></div>' +
+					'<div class="row">' + tmp.jumlahHari + ' hari</div>' +
+				'</div>' +
+				'<div class="col-md-5 col-xs-4">' +
+					'<p>Hadir : <b>' + ( tmp.hadir ? tmp.hadir : '-' ) + ' Hari</b></p>' +
+					'<p>Sakit : <b>' + ( tmp.sakit ? tmp.sakit : '-' ) + ' Hari</b></p>' +
+					'<p>TL : <b>' + ( tmp.tugasLuar ? tmp.tugasLuar : '-' ) + ' Hari</b></p>' +
+				'</div>' +
+				'<div class="col-md-5 col-xs-4">' +
+					'<p>Izin : <b>' + ( tmp.izin ? tmp.izin : '-' ) + ' Hari</b></p>' +
+					'<p>Cuti : <b>' + ( tmp.cuti ? tmp.cuti : '-' ) + ' Hari</b></p>' +
+					'<p>TAP : <b>' + ( tmp.terlambat ? tmp.terlambat : '-' ) + ' Hari</b></p>' +
 				'</div>' +
 			'</div>';
 
@@ -296,24 +322,19 @@ var _monev = {
 		tmpLoader = joinList( tmpLoader, listLoader );
 		
 		listLoader = tmpLoader;
-		
 	},
 	
 	reload: function() {
 		
 		message.writeLog( 'Reload Monev' );
+		loadDate();
 
-		pageName = 'monev';
-		
-		var now = myDate.getNow();
-		$( '#opt-bulan' ).val( myDate.month.getNama( now.month ) );
-		$( '#opt-tahun' ).val( now.year );
-		
+		// Hapus automatic reload
 		clearTimeout( data.timeoutVar );
-		
-		data.loaderNumber = 0;		
-		_monev.load( data.loadNumber );
 
+		this.loadDefaultLoader();
+		data.loaderNumber = 0;		
+		this.load( data.loadNumber );
 	},
 	
 	load: function( loadNumber ) {
@@ -321,7 +342,7 @@ var _monev = {
 			loadNumber = data.loaderNumber;
 		
 		var tmp = listLoader[ loadNumber ];
-		_monev.loadData( tmp );
+		this.loadData( tmp );
 	},
 	
 	loadData: function ( satker ) {
@@ -365,19 +386,14 @@ var _monev = {
 			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
 
 			// Implementasi seperti list-view.
-			html += '<div class="list-group-item">' +
+			html += '<div class="col-md-6 col-xs-12 list-group-item">' +
 				'<b class="list-group-item-heading">' + tmp.namaKegiatan + '</b>' +
 				'<br /><br />' +
-				'<div class="row">' +
-					'<div class="col-md-4" col-xs-12>' +
-					'<img src="images/default.jpg" height="100%" width="100%">' +
-					'</div>' +
-					'<div class="col-md-8 col-xs-4">' +
-						'<p>Program: <b>' + ( tmp.namaProgram ? tmp.namaProgram : '-' ) + '</b></p>' +
-						'<p>Pagu Anggaran: <b>Rp ' + ( tmp.paguAnggaran ? tmp.paguAnggaran : '-' ) + '</b></p>' +
-						'<p>Realisasi Anggaran: <b>Rp ' + ( tmp.realisasiAnggaran ? tmp.realisasiAnggaran : '-' ) + '</b></p>' +
-						'<p>Realisasi Pencapaian: <b>' + ( tmp.realisasiFisik ? tmp.realisasiFisik : '-' ) + ' %</b></p>' +
-					'</div>' +
+				'<div class="col-md-12 col-xs-12">' +
+					'<div class="row"><b>Program: </b>' + ( tmp.namaProgram ? tmp.namaProgram : '-' ) + '</div>' +
+					'<div class="row"><b>Pagu Anggaran: </b>Rp ' + ( tmp.paguAnggaran ? tmp.paguAnggaran : '-' ) + '</div>' +
+					'<div class="row"><b>Realisasi Anggaran: </b>Rp ' + ( tmp.realisasiAnggaran ? tmp.realisasiAnggaran : '-' ) + '</div>' +
+					'<div class="row"><b>Realisasi Pencapaian: </b>' + ( tmp.realisasiFisik ? tmp.realisasiFisik : '-' ) + ' %</div>' +
 				'</div>' +
 			'</div>';
 
@@ -425,18 +441,13 @@ var _sppd = {
 	reload: function() {
 		
 		message.writeLog( 'Reload SPPD' );
-
-		pageName = 'sppd';
-		
-		var now = myDate.getNow();
-		$( '#opt-bulan' ).prop( 'readonly', true );
-		$( '#opt-tahun' ).val( now.year );
+		loadDate();
 		
 		clearTimeout( data.timeoutVar );
-		
-		data.loaderNumber = 0;		
-		_sppd.load( data.loadNumber );
 
+		this.loadDefaultLoader();
+		data.loaderNumber = 0;		
+		this.load( data.loadNumber );
 	},
 	
 	load: function( loadNumber ) {
@@ -444,7 +455,7 @@ var _sppd = {
 			loadNumber = data.loadNumber;
 		
 		var tmp = listLoader[ loadNumber ];
-		_sppd.loadData( tmp.singkatan );
+		this.loadData( tmp.singkatan );
 	},
 	
 	loadData: function ( kode ) {
@@ -486,17 +497,12 @@ var _sppd = {
 			html += '<div class="list-group-item">' +
 				'<b class="list-group-item-heading">' + tmp.nama + '</b>' +
 				'<br /><br />' +
-				'<div class="row">' +
-					'<div class="col-md-4" col-xs-12>' +
-					'<img src="images/default.jpg" height="100%" width="100%">' +
-					'</div>' +
-					'<div class="col-md-8 col-xs-4">' +
-						'<p>Jumlah SPPD: <b>' + tmp.jumlahSppd + '</b></p>' +
-						'<p>Jumlah Tugas Luar: <b>' + tmp.jumlahTugasLuar + ' Hari</b></p>' +
-					'</div>' +
+				'<div class="col-md-12 col-xs-12">' +
+					'<div class="row"><b>Jumlah SPPD: </b>' + tmp.jumlahSppd + '</div>' +
+					'<div class="row"><b>Jumlah Tugas Luar: </b>' + tmp.jumlahTugasLuar + ' Hari</div>' +
 				'</div>' +
 			'</div>';
-
+			
 		}
 
 		page.change( $( '#data-body' ), html );
@@ -650,7 +656,7 @@ var _rss = {
 	
 	itemIndex: 0,
 	
-	view: function() {
+	viewOther: function() {
 		
         $( '#rss' )
           .hide()
@@ -670,38 +676,45 @@ var _rss = {
 	
 	viewDefault: function() {
 
-		page.change( $( '#rss' ), '' );
+		this.view( $( '#running-text' ), 'http://www.sangihekab.go.id/home/rss', '* {dynamic} *' );
+
+	},
+	
+	view: function( element, source, template, limit, timeout ) {
+		if ( !limit )
+			limit = 1;
+
+		if ( !timeout )
+			timeout = 60000;
 		
-		$( '#rss' ).rss( 'http://www.sangihekab.go.id/home/rss', 
-			{
-				limit: 100,
+		page.change( element, '' );
+		
+		element.rss( source, {
+				limit: limit,
 	            effect: 'slideFastSynced',
-	            entryTemplate: '<p>{dynamic}</p>',
+	            entryTemplate: template,
 				tokens: {
 					dynamic: function( entry, tokens ) {
-						
+
 						var totalEntries = tokens.totalEntries;
-						
+
 						if ( _rss.itemIndex > totalEntries )
 							_rss.itemIndex = 0;
-						
-						if ( tokens.index == _rss.itemIndex ) {
-							
+
+						if ( tokens.index == _rss.itemIndex )
 							return tokens.bodyPlain;
-						}
-						
+
 						return ' ';
 					}
 				}
 			} ).show();
-		
+
 		setTimeout( function() {
 			_rss.itemIndex++;
-			_rss.viewDefault();
-		}, 15000);
-
+			_rss.view( element, source, template);
+		}, timeout);
 	},
-	
+
 	viewFeedMikle: function() {
 		
 		var params = {
@@ -751,7 +764,7 @@ var _rss = {
 			keyword_exc: ""
 		};
 		
-		feedwind_show_widget_iframe( params, $( '#rss' ).html() );
+		feedwind_show_widget_iframe( params, $( '#running-text' ).html() );
 		
 	}
 	
