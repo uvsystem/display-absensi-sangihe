@@ -446,7 +446,7 @@ var _sppd = {
 		clearTimeout( data.timeoutVar );
 
 		this.loadDefaultLoader();
-		data.loaderNumber = 0;		
+		data.loadNumber = 0;		
 		this.load( data.loadNumber );
 	},
 	
@@ -455,6 +455,10 @@ var _sppd = {
 			loadNumber = data.loadNumber;
 		
 		var tmp = listLoader[ loadNumber ];
+		
+		console.log(loadNumber);
+		console.log(listLoader);
+		
 		this.loadData( tmp.singkatan );
 	},
 	
@@ -494,7 +498,7 @@ var _sppd = {
 			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
 
 			// Implementasi seperti list-view.
-			html += '<div class="list-group-item">' +
+			html += '<div class="col-md-6 col-xs-12 list-group-item">' +
 				'<b class="list-group-item-heading">' + tmp.nama + '</b>' +
 				'<br /><br />' +
 				'<div class="col-md-12 col-xs-12">' +
