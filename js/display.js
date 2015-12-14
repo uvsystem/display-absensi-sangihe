@@ -81,6 +81,17 @@ $( document ).ready( function () {
 		_sppd.reload();
 	});
 
+	$( document ).on( 'click', '#pegawai-detail', function() {
+		pageName = 'pegawai';
+
+		/*
+		 * Load halaman home dari html/home.html
+		 */
+		page.load( $( '#isi' ), 'html/detail.html' );
+		
+		_pegawai.reload();
+	});
+
 	$( document ).on( 'click', '#berita-lengkap', function() {
 		/*
 		 * Load halaman home dari html/home.html
@@ -102,6 +113,102 @@ $( document ).ready( function () {
 	});
 	
 });
+
+/*
+ * Mengambil detail pegawai.
+ */
+function detailPegawai( id ) {
+	
+	var tmp = storage.getById( { nama: 'pegawai'}, id );
+	if ( !tmp )
+		return;
+
+	// Hapus automatic reload
+	clearTimeout( data.timeoutVar );
+	
+	// Ubah judul pada panel data.
+	$( '#data-heading' ).html( '<b>' + tmp.nama + '</b>' );
+
+	var html = '<p>NIP : ' + tmp.nip + ' </p>' +
+		'<p>Unit Kerja : ' + tmp.unitKerja.nama + ' </p>' +
+		'<p>Tanggal Lahir : ' + tmp.tanggalLahirStr + ' </p>' +
+		'<p>Golongan : ' + tmp.pangkat + ' </p>' +
+		'<p>Jabatan : ' + tmp.namaJabatan + ' </p>' +
+		'<p>Eselon : ' + tmp.eselon + ' </p>';
+
+	page.change( $( '#data-body' ), html );
+};
+
+function showSppd( nip ) {
+
+	var callback = function( result ) {
+		if ( result.tipe == 'LIST' ) {
+			// Hapus automatic reload
+			clearTimeout( data.timeoutVar );
+
+			var list = result.list;
+			
+			/*
+			 * Simpan daftar dalam storage untuk digunakan selanjutnya.
+			 */
+			storage.set( list, 'sppd' );
+			
+			var html = '<div class="list-group">';
+			
+			for ( var i = 0; i < list.length; i++ ) {
+
+				var tmp = list[ i ];
+
+				// Ubah judul pada panel data.
+				$( '#data-heading' ).html( '<b>' + tmp.nama + '</b>' );
+				
+				// Implementasi seperti list-view.
+				html += '<div class="col-md-6 col-xs-12 list-group-item">' +
+					'<a href="#" onClick="detailSppd(' + tmp.id + ')">' +
+					'<b class="list-group-item-heading">' + tmp.nomor + '</b>' +
+					'</a>' +
+				'</div>';
+
+			}
+			
+			html += '</div>';
+
+			page.change( $( '#data-body' ), html );
+		}
+	};
+	
+	ehrmRestAdapter.callFree( '/sppd/' + nip, null, 'GET',
+		function( result ) {
+			message.writeLog( "Mengambil sppd: " + ( result.list ? result.list.length : 0 ) ); // LOG
+			callback( result );
+		},
+		message.error
+	);
+};
+
+function detailSppd( id ) {
+	
+	var tmp = storage.getById( { nama: 'sppd'}, id );
+
+	if ( !tmp )
+		return;
+
+	// Hapus automatic reload
+	clearTimeout( data.timeoutVar );
+	
+	// Ubah judul pada panel data.
+	$( '#data-heading' ).html( '<b>' + tmp.nomor + '</b>' );
+
+	var html = '<p>NIP : ' + tmp.nip + '</p>' +
+		'<p>Nama : ' + tmp.nama + '</p>' +
+		'<p>Satuan Kerja : ' + tmp.satuanKerja + '</p>' +
+		'<p>Tanggal : ' + tmp.berangkat + '</p>' +
+		'<p>Tujuan : ' + tmp.tujuan + '</p>' +
+		'<p>Maksud : ' + tmp.maksud + '</p>' +
+		'<p>Lama : ' + tmp.jumlahHari + ' Hari</p>';
+
+	page.change( $( '#data-body' ), html );
+};
 
 function joinList( list1, list2 ) {
 
@@ -456,9 +563,6 @@ var _sppd = {
 		
 		var tmp = listLoader[ loadNumber ];
 		
-		console.log(loadNumber);
-		console.log(listLoader);
-		
 		this.loadData( tmp.singkatan );
 	},
 	
@@ -493,17 +597,19 @@ var _sppd = {
 		for ( var i = base; i < top; i++ ) {
 
 			var tmp = list[ i ];
-
+			
 			// Ubah judul pada panel data.
 			$( '#data-heading' ).html( '<b>' + tmp.namaUnitKerja.toUpperCase() + '</b>' );
 
 			// Implementasi seperti list-view.
 			html += '<div class="col-md-6 col-xs-12 list-group-item">' +
+				'<a href="#" onClick="showSppd(\'' + tmp.nip + '\')">' +
 				'<b class="list-group-item-heading">' + tmp.nama + '</b>' +
+				'</a>' +
 				'<br /><br />' +
 				'<div class="col-md-12 col-xs-12">' +
-					'<div class="row"><b>Jumlah SPPD: </b>' + tmp.jumlahSppd + '</div>' +
-					'<div class="row"><b>Jumlah Tugas Luar: </b>' + tmp.jumlahTugasLuar + ' Hari</div>' +
+					'<p>Jumlah SPPD: ' + tmp.jumlahSppd + '</p>' +
+					'<p>Jumlah Tugas Luar: ' + tmp.jumlahTugasLuar + ' Hari</p>' +
 				'</div>' +
 			'</div>';
 			
@@ -532,6 +638,135 @@ var _sppd = {
 				
 			}, data.timeout );
 				
+		}
+	}
+};
+
+var _pegawai = {
+
+	/**
+	 * Load semua sub-unit yang digunakan untuk mengambil data.
+	 */
+	loadDefaultLoader: function () {
+		
+		var tmpLoader = [];
+		loadSatker( 'SETDA' ); // Untuk semua sub unit kerja dalam Sekretariat Daerah
+		tmpLoader = joinList( tmpLoader, listLoader );
+		
+		listLoader = tmpLoader;
+	},
+
+	reload: function() {
+		
+		message.writeLog( 'Reload Pegawai' ); // LOG
+		loadDate();
+		
+		// Hapus automatic reload
+		clearTimeout( data.timeoutVar );
+
+		this.loadDefaultLoader();
+		data.loaderNumber = 0;
+		this.load( data.loadNumber );
+	},
+
+	load: function ( loadNumber ) {
+		if ( !loadNumber )
+			loadNumber = data.loaderNumber;
+		
+		var tmp = listLoader[ loadNumber ];
+		this.loadData( tmp.id );
+	},
+
+	loadData: function ( id ) {
+		
+		var callback = function( result ) {
+			if ( result.tipe == 'LIST' ) {
+				
+				/*
+				 * Simpan daftar dalam storage untuk digunakan selanjutnya.
+				 */
+				storage.set( result.list, 'pegawai' );
+
+				_pegawai.setData( result.list, 0 );
+			} else if ( result.tipe != 'ERROR' ) {
+				reloadLoadNumber( _absensi );
+			}
+		};
+
+		ehrmRestAdapter.callFree( '/pegawai/satker/' + id + '/minim', null, 'GET',
+			function( result ) {
+				message.writeLog( "Mengambil pegawai: " + ( result.list ? result.list.length : 0 ) ); // LOG
+				callback( result );
+			},
+			message.error
+		);
+	},
+
+	setData: function ( list, pageNumber ) {
+		
+		var html = '';
+
+		// Menentukan batas bawah dari data yang akan ditampilkan, sesuai nomor halaman dan jumlah data ddalam sekali tampil.
+		// base adalah index pada list yang akan digunakan sebagai batas bawah.
+		var base = ( pageNumber * data.tableSize );
+		
+		// Menentukan batas atas dari data yang akan ditampilkan, sesuai index batas bawah dan jumlah data dalam sekali tampil.
+		// top adalah index pada list yang akan digunakan sebagai batas atas.
+		var top = base + data.tableSize;
+
+		// Gunakan index akhir list, jika batas atas lebih besar.
+		if ( top > list.length )
+			top = list.length;
+
+		html += '<div class="list-group">';
+		
+		for ( var i = base; i < top; i++ ) {
+
+			var tmp = list[ i ];
+
+			// Ubah judul pada panel data.
+			$( '#data-heading' ).html( '<b>' + tmp.unitKerja.nama.toUpperCase() + '</b>' );
+			
+			// Implementasi seperti list-view.
+			html += '<div class="col-md-6 col-xs-12 list-group-item">' +
+				'<a href="#" onClick="detailPegawai(' + tmp.id + ')">' +
+				'<b class="list-group-item-heading">' + tmp.nama + '</b>' +
+				'</a>' +
+				'<br /><br />' +
+				'<div class="col-md-6 col-xs-12">' +
+					'<p>NIP : ' + tmp.nip + ' </p>' +
+					'<p>Golongan : ' + tmp.golongan + ' </p>' +
+					'<p>Jabatan : ' + tmp.jabatan + ' </p>' +
+				'</div>' +
+			'</div>';
+
+		}
+		
+		html += '</div>';
+
+		page.change( $( '#data-body' ), html );
+
+		// Menentukan sisa data yang masih akan ditampilkan.
+		var sisa = list.length - ( top );
+
+		if ( sisa > 0 ) {
+
+			// Reload data dari list yang sama.
+			data.timeoutVar = setTimeout( function() {
+
+				_pegawai.setData( list, ++pageNumber );
+
+			}, data.timeout );
+
+		} else {
+
+			// Reload list baru dari server.
+			data.timeoutVar = setTimeout( function() { 
+
+				reloadLoadNumber( _pegawai );
+
+			}, data.timeout );
+
 		}
 	}
 };
