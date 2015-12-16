@@ -79,6 +79,9 @@ $( document ).ready( function () {
 		page.load( $( '#isi' ), 'html/detail.html' );
 		
 		_sppd.reload();
+		
+		$( '#opt-bulan' ).hide();
+		$( '#opt-tahun' ).hide();
 	});
 
 	$( document ).on( 'click', '#pegawai-detail', function() {
@@ -90,6 +93,9 @@ $( document ).ready( function () {
 		page.load( $( '#isi' ), 'html/detail.html' );
 		
 		_pegawai.reload();
+		
+		$( '#opt-bulan' ).hide();
+		$( '#opt-tahun' ).hide();
 	});
 
 	$( document ).on( 'click', '#berita-lengkap', function() {
@@ -258,9 +264,18 @@ function reloadLoadNumber( container ) {
 		data.loaderNumber = 0;
 
 	}
-
-	// Load rekap
-	container.load();
+	
+	console.log(data.loaderNumber);
+	
+	var satker = listLoader[ data.loaderNumber ];
+	while (satker.tipe == 'KEASISTENAN') {
+		data.loaderNumber += 1;
+		satker = listLoader[ data.loaderNumber ];
+	}
+	
+	console.log(data.loaderNumber);
+	
+	container.load( data.loaderNumber );
 
 };
 
@@ -324,6 +339,10 @@ var _absensi = {
 			loadNumber = data.loaderNumber;
 		
 		var tmp = listLoader[ loadNumber ];
+		while (tmp.tipe == 'KEASISTENAN') {
+			tmp = listLoader[ ++loadNumber ];
+		}
+		
 		this.loadData( tmp.singkatan );
 	},
 
@@ -666,7 +685,7 @@ var _pegawai = {
 
 		this.loadDefaultLoader();
 		data.loaderNumber = 0;
-		this.load( data.loadNumber );
+		this.load( data.loaderNumber );
 	},
 
 	load: function ( loadNumber ) {
@@ -674,6 +693,10 @@ var _pegawai = {
 			loadNumber = data.loaderNumber;
 		
 		var tmp = listLoader[ loadNumber ];
+		while (tmp.tipe == 'KEASISTENAN') {
+			tmp = listLoader[ ++loadNumber ];
+		}
+		
 		this.loadData( tmp.id );
 	},
 
@@ -689,7 +712,7 @@ var _pegawai = {
 
 				_pegawai.setData( result.list, 0 );
 			} else if ( result.tipe != 'ERROR' ) {
-				reloadLoadNumber( _absensi );
+				reloadLoadNumber( _pegawai );
 			}
 		};
 
@@ -735,8 +758,8 @@ var _pegawai = {
 				'<br /><br />' +
 				'<div class="col-md-6 col-xs-12">' +
 					'<p>NIP : ' + tmp.nip + ' </p>' +
-					'<p>Golongan : ' + tmp.golongan + ' </p>' +
-					'<p>Jabatan : ' + tmp.jabatan + ' </p>' +
+					'<p>Golongan : ' + tmp.pangkat + ' </p>' +
+					'<p>Jabatan : ' + tmp.namaJabatan + ' </p>' +
 				'</div>' +
 			'</div>';
 
