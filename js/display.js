@@ -66,6 +66,7 @@ $( document ).ready( function () {
 		 * Load halaman home dari html/home.html
 		 */
 		page.load( $( '#isi' ), 'html/detail.html' );
+		$('#footer-detail').hide();
 		
 		_monev.reload();
 	});
