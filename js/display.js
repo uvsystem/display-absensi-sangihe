@@ -589,7 +589,7 @@ var _sppd = {
 	loadData: function ( kode ) {
 		var now = myDate.getNow();
 	
-		sppdRestAdapter.rekap( now.year, function( result ) {
+		suratTugasRestAdapter.rekap( now.year, function( result ) {
 			if ( result.tipe == 'LIST' ) {
 				_sppd.setData( result.list, 0 );
 			} else if ( result.tipe != 'ERROR' ) {

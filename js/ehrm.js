@@ -738,6 +738,17 @@ var suratTugasRestAdapter = {
 		);
 	},
 	
+	rekap: function( tahun, callback ) {
+
+		ehrmRestAdapter.callFree( '/suratTugas/rekap/tahun/' + tahun, null, 'GET',
+			function( result ) {
+				callback( result );
+				message.writeLog( "Rekap Surat Tugas tahun: " + tahun + ", jumlah: " + result.list ); // LOG
+			},
+			message.error
+		);
+	},
+	
 	search: function( keyword, callback ) {
 
 		ehrmRestAdapter.call( '/suratTugas/search/' + keyword, null, 'GET',
